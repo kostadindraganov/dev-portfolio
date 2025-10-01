@@ -37,7 +37,21 @@ export default defineConfig({
 		dashboardTool({
 			name: 'deployment',
 			title: 'Deployment',
-			widgets: [vercelWidget()],
+			widgets: [
+				vercelWidget(),
+				netlifyWidget({
+					title: 'kokodev.netlify.app',
+					sites: [
+						{
+							title: 'kokodev.netlify.app',
+							apiId: '82bce906-38e2-441d-8c20-fb4935d1c11a',
+							buildHookId: '68dd94d58c1741007934bfb5',
+							name: 'kokodev',
+							url: 'https://kokodev.netlify.app',
+						},
+					],
+				}),
+			],
 		}),
 		dashboardTool({
 			name: 'info',
@@ -46,19 +60,6 @@ export default defineConfig({
 				projectInfoWidget(),
 				projectUsersWidget(),
 				InfoWidget({ version: pkg.version }),
-				netlifyWidget({
-					title: 'My Netlify deploys',
-					sites: [
-						{
-							title: 'Sanity Studio',
-							apiId: '82bce906-38e2-441d-8c20-fb4935d1c11a',
-							buildHookId:
-								'https://api.netlify.com/build_hooks/68dd94d58c1741007934bfb5',
-							name: 'kokodev',
-							url: 'https://kokodev.netlify.app',
-						},
-					],
-				}),
 			],
 		}),
 		visionTool({ defaultApiVersion: apiVersion }),
