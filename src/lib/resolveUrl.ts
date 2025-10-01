@@ -1,4 +1,4 @@
-import { BLOG_DIR } from './env'
+import { BLOG_DIR, PORTFOLIO_DIR } from './env'
 import { DEFAULT_LANG } from './i18n'
 import { stegaClean } from 'next-sanity'
 
@@ -14,7 +14,12 @@ export default function resolveUrl(
 		language?: string
 	} = {},
 ) {
-	const segment = page?._type === 'blog.post' ? `/${BLOG_DIR}/` : '/'
+	const segment =
+		page?._type === 'blog.post'
+			? `/${BLOG_DIR}/`
+			: page?._type === 'portfolio.item'
+				? `/${PORTFOLIO_DIR}/`
+				: '/'
 	const lang = language && language !== DEFAULT_LANG ? `/${language}` : ''
 	const slug = page?.metadata?.slug?.current
 	const path = slug === 'index' ? null : slug

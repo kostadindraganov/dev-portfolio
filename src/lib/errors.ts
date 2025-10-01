@@ -19,4 +19,10 @@ export default {
 		'Solution: Add a new Global module document in your Sanity Studio with the path "blog/".\n' +
 		'Also add the Blog post content module to display blog post content.\n\n' +
 		'💁‍♂️ https://sanitypress.dev/docs/errors#missing-blog-template',
+
+	missingPortfolioTemplate:
+		'Missing portfolio template: 🔍 Your portfolio items are hiding...\n\n' +
+		'Solution: Add a new Global module document in your Sanity Studio with the path "portfolio/".\n' +
+		'Also add the Portfolio item content module to display portfolio item content.\n\n' +
+		'💁‍♂️ https://sanitypress.dev/docs/errors#missing-portfolio-template',
 }

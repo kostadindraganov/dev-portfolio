@@ -24,6 +24,12 @@ export const structure = structureTool({
 				S.documentTypeListItem('blog.category').title('Blog categories'),
 				S.divider(),
 
+				S.documentTypeListItem('portfolio.item').title('Portfolio items'),
+				S.documentTypeListItem('portfolio.category').title(
+					'Portfolio categories',
+				),
+				S.divider(),
+
 				S.documentTypeListItem('navigation'),
 				S.documentTypeListItem('redirect').title('Redirects'),
 

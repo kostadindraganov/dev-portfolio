@@ -71,6 +71,23 @@ declare global {
 			slug: { current: string }
 		}
 
+		interface PortfolioItem extends PageBase {
+			readonly _type: 'portfolio.item'
+			body: any
+			readTime: number
+			headings?: { style: string; text: string }[]
+			categories: PortfolioCategory[]
+			authors: Person[]
+			featured: boolean
+			hideTableOfContents: boolean
+			publishDate: string
+		}
+
+		interface PortfolioCategory extends SanityDocument {
+			title: string
+			slug: { current: string }
+		}
+
 		// miscellaneous
 
 		interface Announcement extends SanityDocument {
@@ -183,7 +200,7 @@ declare global {
 			readonly _type: 'link'
 			label: string
 			type: 'internal' | 'external'
-			internal?: Page | BlogPost
+			internal?: Page | BlogPost | PortfolioItem
 			external?: string
 			params?: string
 		}
@@ -206,6 +223,40 @@ declare global {
 		interface Module<T = string> {
 			_type: T
 			_key: string
+			options?: {
+				hidden?: boolean
+				uid?: string
+			}
+		}
+
+		// modules
+		interface BlogList extends Module<'blog-list'> {
+			pretitle?: string
+			intro?: any
+			layout: 'grid' | 'carousel'
+			showFeaturedPostsFirst: boolean
+			displayFilters: boolean
+			limit?: number
+			filteredCategory?: BlogCategory
+		}
+
+		interface PortfolioList extends Module<'portfolio-list'> {
+			pretitle?: string
+			intro?: any
+			layout: 'grid' | 'carousel'
+			showFeaturedFirst: boolean
+			displayFilters: boolean
+			limit?: number
+			filteredCategory?: PortfolioCategory
+		}
+
+		interface PortfolioFrontpage extends Module<'portfolio-frontpage'> {
+			mainItem: 'recent' | 'featured'
+			showFeaturedFirst: boolean
+			itemsPerPage: number
+		}
+
+		interface PortfolioItemContent extends Module<'portfolio-item-content'> {
 			options?: {
 				hidden?: boolean
 				uid?: string

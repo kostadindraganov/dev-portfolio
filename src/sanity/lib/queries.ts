@@ -1,7 +1,7 @@
 import { fetchSanityLive } from './fetch'
 import { groq } from 'next-sanity'
 import errors from '@/lib/errors'
-import { BLOG_DIR } from '@/lib/env'
+import { BLOG_DIR, PORTFOLIO_DIR } from '@/lib/env'
 
 export const LINK_QUERY = groq`
 	...,
@@ -47,6 +47,7 @@ export const MODULES_QUERY = groq`
 		link{ ${LINK_QUERY} }
 	},
 	_type == 'blog-list' => { filteredCategory-> },
+	_type == 'portfolio-list' => { filteredCategory-> },
 	_type == 'breadcrumbs' => { crumbs[]{ ${LINK_QUERY} } },
 	_type == 'callout' => {
 		content[]{
@@ -165,21 +166,26 @@ export async function getSite() {
 
 export async function getTranslations() {
 	return await fetchSanityLive<Sanity.Translation[]>({
-		query: groq`*[_type in ['page', 'blog.post'] && defined(language)]{
+		query: groq`*[_type in ['page', 'blog.post', 'portfolio.item'] && defined(language)]{
 			'slug': '/' + select(
 				_type == 'blog.post' => '${BLOG_DIR}/' + metadata.slug.current,
+                _type == 'portfolio.item' => '${PORTFOLIO_DIR}/' + metadata.slug.current,
 				metadata.slug.current != 'index' => metadata.slug.current,
 				''
 			),
 			'translations': *[_type == 'translation.metadata' && references(^._id)].translations[].value->{
 				'slug': '/' + select(
 					_type == 'blog.post' => '${BLOG_DIR}/' + language + '/' + metadata.slug.current,
+                    _type == 'portfolio.item' => '${PORTFOLIO_DIR}/' + language + '/' + metadata.slug.current,
 					metadata.slug.current != 'index' => language + '/' + metadata.slug.current,
 					language
 				),
 				_type == 'blog.post' => {
 					'slugBlogAlt': '/' + language + '/${BLOG_DIR}/' + metadata.slug.current
 				},
+                _type == 'portfolio.item' => {
+                    'slugPortfolioAlt': '/' + language + '/${PORTFOLIO_DIR}/' + metadata.slug.current
+                },
 				language
 			}
 		}`,

@@ -14,3 +14,8 @@ export const useBlogFilters = () => {
 		setAuthor,
 	}
 }
+
+export const usePortfolioFilters = () => {
+	const { category, setCategory, author, setAuthor } = useBlogFilters()
+	return { category, setCategory, author, setAuthor }
+}

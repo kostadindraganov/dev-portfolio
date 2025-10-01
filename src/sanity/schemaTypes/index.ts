@@ -6,6 +6,8 @@ import page from './documents/page'
 import globalModule from './documents/global-module'
 import blogPost from './documents/blog.post'
 import blogCategory from './documents/blog.category'
+import portfolioItem from './documents/portfolio.item'
+import portfolioCategory from './documents/portfolio.category'
 import navigation from './documents/navigation'
 import redirect from './documents/redirect'
 
@@ -32,6 +34,9 @@ import accordionList from './modules/accordion-list'
 import blogFrontpage from './modules/blog-frontpage'
 import blogList from './modules/blog-list'
 import blogPostContent from './modules/blog-post-content'
+import portfolioFrontpage from './modules/portfolio-frontpage'
+import portfolioList from './modules/portfolio-list'
+import portfolioItemContent from './modules/portfolio-item-content'
 import breadcrumbs from './modules/breadcrumbs'
 import callout from './modules/callout'
 import cardList from './modules/card-list'
@@ -60,6 +65,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 	globalModule,
 	blogPost,
 	blogCategory,
+	portfolioItem,
+	portfolioCategory,
 	navigation,
 
 	// miscellaneous
@@ -86,6 +93,9 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 	blogFrontpage,
 	blogList,
 	blogPostContent,
+	portfolioFrontpage,
+	portfolioList,
+	portfolioItemContent,
 	breadcrumbs,
 	callout,
 	cardList,

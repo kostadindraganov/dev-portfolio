@@ -11,7 +11,7 @@ import css from './PostContent.module.css'
 export default function PostContent({
 	post,
 	...props
-}: { post?: Sanity.BlogPost } & Sanity.Module) {
+}: { post?: Sanity.BlogPost | Sanity.PortfolioItem } & Sanity.Module) {
 	if (!post) return null
 
 	const showTOC = !post.hideTableOfContents || !!post.headings?.length

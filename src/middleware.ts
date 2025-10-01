@@ -13,14 +13,14 @@ export default async function (request: NextRequest) {
 	const T = await getTranslations()
 
 	const isPrefixed = !!T.find((t) =>
-		t.translations?.some(({ slug }) => slug === pathname),
+		t.translations?.some((tr) => tr?.slug === pathname),
 	)
 
 	if (!request.cookies.has(langCookieName) && !isPrefixed)
 		return NextResponse.next()
 
 	const available = T?.find((t) =>
-		[t.slug, ...(t.translations?.map(({ slug }) => slug) ?? [])].includes(
+		[t.slug, ...(t.translations?.map((tr) => tr?.slug) ?? [])].includes(
 			pathname,
 		),
 	)

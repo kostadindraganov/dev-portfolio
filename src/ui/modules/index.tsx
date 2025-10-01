@@ -2,6 +2,7 @@ import AccordionList from './AccordionList'
 import BlogFrontpage from './blog/BlogFrontpage'
 import BlogList from './blog/BlogList'
 import BlogPostContent from './blog/PostContent'
+import { PortfolioFrontpage } from './blog/BlogFrontpage'
 import Breadcrumbs from './Breadcrumbs'
 import Callout from './Callout'
 import CardList from './CardList'
@@ -28,6 +29,9 @@ const MODULE_MAP = {
 	'blog-frontpage': BlogFrontpage,
 	'blog-list': BlogList,
 	'blog-post-content': BlogPostContent,
+	'portfolio-frontpage': PortfolioFrontpage,
+	'portfolio-list': BlogList,
+	'portfolio-item-content': BlogPostContent,
 	breadcrumbs: Breadcrumbs,
 	callout: Callout,
 	'card-list': CardList,
@@ -57,11 +61,13 @@ export default function Modules({
 }: {
 	modules?: Sanity.Module[]
 	page?: Sanity.Page
-	post?: Sanity.BlogPost
+	post?: Sanity.BlogPost | Sanity.PortfolioItem
 }) {
 	const getAdditionalProps = (module: Sanity.Module) => {
 		switch (module._type) {
 			case 'blog-post-content':
+				return { post }
+			case 'portfolio-item-content':
 				return { post }
 			case 'breadcrumbs':
 				return { currentPage: post || page }
