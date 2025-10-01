@@ -9,7 +9,7 @@ export default async function Breadcrumbs({
 }: Partial<{
 	crumbs: Sanity.Link[]
 	hideCurrent?: boolean
-	currentPage: Sanity.Page | Sanity.BlogPost
+	currentPage: Sanity.Page | Sanity.BlogPost | Sanity.PortfolioItem
 }>) {
 	return (
 		<nav className="section py-4 text-sm">
