@@ -2,7 +2,7 @@
 
 import pkg from './package.json'
 import { defineConfig } from 'sanity'
-import { projectId, dataset, apiVersion } from '@/sanity/lib/env'
+import { projectId, dataset, apiVersion, youtubeApiKey } from '@/sanity/lib/env'
 import { structure } from './src/sanity/structure'
 import { presentation } from './src/sanity/presentation'
 import { icon } from '@/sanity/ui/Icon'
@@ -19,6 +19,8 @@ import { supportedLanguages } from '@/lib/i18n'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import { schemaTypes } from './src/sanity/schemaTypes'
 import resolveUrl from '@/lib/resolveUrl'
+import { netlifyWidget } from 'sanity-plugin-dashboard-widget-netlify'
+import { youtubeInput } from 'sanity-plugin-youtube-input'
 
 const singletonTypes = ['site']
 
@@ -44,10 +46,22 @@ export default defineConfig({
 				projectInfoWidget(),
 				projectUsersWidget(),
 				InfoWidget({ version: pkg.version }),
+				netlifyWidget({
+					title: 'My Netlify deploys',
+					sites: [
+						{
+							title: 'Sanity Studio',
+							apiId: 'xxxxx-yyyy-zzzz-xxxx-yyyyyyyy',
+							buildHookId: 'xxxyyyxxxyyyyxxxyyy',
+							name: 'sanity-gatsby-blog-20-studio',
+						},
+					],
+				}),
 			],
 		}),
 		visionTool({ defaultApiVersion: apiVersion }),
 		codeInput(),
+		youtubeInput({ apiKey: youtubeApiKey }),
 		documentInternationalization({
 			supportedLanguages,
 			schemaTypes: ['page', 'blog.post'],

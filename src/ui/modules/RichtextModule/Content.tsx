@@ -6,6 +6,7 @@ import Image from './Image'
 import Code from './Code'
 import Admonition from './Admonition'
 import CustomHTML from '@/ui/modules/CustomHTML'
+import YouTube from './YouTube'
 
 export default function Content({
 	value,
@@ -33,6 +34,8 @@ export default function Content({
 						image: Image,
 						admonition: Admonition,
 						code: Code,
+						youtube: YouTube,
+						youtubeVideo: YouTube,
 						'custom-html': ({ value }) => (
 							<CustomHTML
 								className="has-[table]:md:[grid-column:bleed] has-[table]:md:mx-auto"

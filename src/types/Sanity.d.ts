@@ -127,6 +127,13 @@ declare global {
 
 		// objects
 
+		interface YouTubeObject {
+			readonly _type?: 'youtube' | 'youtubeVideo'
+			id?: string
+			url?: string
+			title?: string
+		}
+
 		interface Code {
 			readonly _type: 'code'
 			language: string
