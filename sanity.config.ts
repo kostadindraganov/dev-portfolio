@@ -51,9 +51,11 @@ export default defineConfig({
 					sites: [
 						{
 							title: 'Sanity Studio',
-							apiId: 'xxxxx-yyyy-zzzz-xxxx-yyyyyyyy',
-							buildHookId: 'xxxyyyxxxyyyyxxxyyy',
-							name: 'sanity-gatsby-blog-20-studio',
+							apiId: '82bce906-38e2-441d-8c20-fb4935d1c11a',
+							buildHookId:
+								'https://api.netlify.com/build_hooks/68dd94d58c1741007934bfb5',
+							name: 'kokodev',
+							url: 'https://kokodev.netlify.app',
 						},
 					],
 				}),
