@@ -8,7 +8,7 @@ import { useGSAP } from '@gsap/react'
 let isInitialLoad = true
 
 export default function Preloader() {
-	const [showPreloader, setShowPreloader] = useState(false)
+	const [showPreloader, setShowPreloader] = useState(true)
 	const [loaderAnimating, setLoaderAnimating] = useState(false)
 	const pathname = usePathname()
 
@@ -16,8 +16,9 @@ export default function Preloader() {
 		// Only show preloader on home page and only on initial load
 		if (pathname === '/') {
 			setShowPreloader(isInitialLoad)
+		} else {
+			setShowPreloader(false)
 		}
-
 		return () => {
 			isInitialLoad = false
 		}

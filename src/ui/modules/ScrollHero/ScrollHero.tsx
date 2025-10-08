@@ -7,7 +7,8 @@
 // import CustomHTML from './CustomHTML'
 // import Reputation from '@/ui/Reputation'
 // import CTAList from '@/ui/CTAList'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -21,6 +22,10 @@ export default function ScrollHero({
 	assetFaded,
 	...props
 }: Partial<Sanity.ScrollHero> & Sanity.Module) {
+	gsap.registerPlugin(ScrollTrigger)
+
+	const pathname = usePathname()
+	const [isInitialized, setIsInitialized] = useState(false)
 	const asset = assets?.[0]
 	const containerRef = useRef<HTMLDivElement | null>(null)
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -32,9 +37,17 @@ export default function ScrollHero({
 	const videoFramesRef = useRef<{ frame: number }>({ frame: 0 })
 	const lastLoadedFrameRef = useRef<number>(0)
 
-	gsap.registerPlugin(ScrollTrigger)
-
 	const FIRST_FRAME = '/frames/frame_0001.webp'
+
+	// Force re-initialization on route changes
+	useEffect(() => {
+		setIsInitialized(false)
+		const timer = setTimeout(() => {
+			setIsInitialized(true)
+		}, 100)
+		return () => clearTimeout(timer)
+	}, [pathname])
+
 	// Sync ScrollTrigger with app-wide Lenis from ClientLayout
 	useLenis(() => {
 		ScrollTrigger.update()
@@ -42,6 +55,8 @@ export default function ScrollHero({
 
 	useGSAP(
 		() => {
+			if (!isInitialized) return
+
 			let scrollTriggerInstance: ScrollTrigger | null = null
 			const canvas = canvasRef.current
 			if (!canvas) return
@@ -91,11 +106,17 @@ export default function ScrollHero({
 					const idx = nextIndexToLoad++
 					inFlight++
 					const img = new Image()
-					// Hint async decoding; prioritize very first frames
+
+					// Performance optimizations for image loading
+					img.crossOrigin = 'anonymous'
+					img.loading = 'eager' // Load immediately for scroll animation
 					;(img as any).decoding = 'async'
+
+					// Prioritize first frames for immediate display
 					try {
-						;(img as any).fetchPriority = idx < 4 ? 'high' : 'auto'
+						;(img as any).fetchPriority = idx < 6 ? 'high' : 'auto'
 					} catch {}
+
 					img.onload = () => {
 						images[idx] = img
 						lastLoadedFrameRef.current = Math.max(
@@ -105,8 +126,12 @@ export default function ScrollHero({
 						loadedCount++
 						inFlight--
 						maybeInitScrollTrigger()
-						// Draw opportunistically for smoother visual fill-in
-						render()
+
+						// Only render if this is an important frame
+						if (idx < 10 || idx % 5 === 0) {
+							render()
+						}
+
 						startNextLoad()
 					}
 					img.onerror = () => {
@@ -134,6 +159,7 @@ export default function ScrollHero({
 				const desired = videoFramesRef.current.frame
 				const safeIndex = Math.min(desired, lastLoadedFrameRef.current)
 				const img = images[safeIndex]
+
 				if (img && img.complete && img.naturalWidth > 0) {
 					const imageAspect = img.naturalWidth / img.naturalHeight
 					const canvasAspect = canvasWidth / canvasHeight
@@ -166,98 +192,126 @@ export default function ScrollHero({
 					end: `+=${window.innerHeight * 7}px`,
 					pin: true,
 					pinSpacing: true,
-					scrub: 1,
+					scrub: 0.5, // Smoother scrub for better performance
 					onUpdate: (self) => {
 						const progress = self.progress
 
 						const animationProgress = Math.min(progress, 1)
 						const targetFrame = Math.round(animationProgress * (frameCount - 1))
+
 						videoFramesRef.current.frame = targetFrame
 						render()
 
-						if (progress <= 0.1) {
-							const navProgress = progress / 0.1
-							const opacity = 1 - navProgress
-							if (navRef.current) gsap.set(navRef.current, { opacity })
-						} else {
-							if (navRef.current) gsap.set(navRef.current, { opacity: 0 })
-						}
-
-						if (progress <= 0.25) {
-							const zProgress = progress / 0.25
-							const translateZ = zProgress * -500
-
-							let opacity = 1
-							if (progress >= 0.2) {
-								const fadeProgress = Math.min(
-									(progress - 0.2) / (0.25 - 0.2),
-									1,
-								)
-								opacity = 1 - fadeProgress
-							}
-
-							if (headerRef.current)
-								gsap.set(headerRef.current, {
-									transform: `translate(-50%, -50%) translateZ(${translateZ}px)`,
-									opacity,
-								})
-						} else {
-							if (headerRef.current) gsap.set(headerRef.current, { opacity: 0 })
-						}
-
-						if (progress < 0.6) {
-							if (heroImgRef.current)
-								gsap.set(heroImgRef.current, {
-									transform: 'translateZ(1000px)',
-									opacity: 0,
-								})
-						} else if (progress >= 0.6 && progress <= 0.9) {
-							const imgProgress = (progress - 0.6) / (0.9 - 0.6)
-							const translateZ = 1000 - imgProgress * 1000
-
-							let opacity = 0
-							if (progress <= 0.8) {
-								const opacityProgress = (progress - 0.6) / (0.8 - 0.6)
-								opacity = opacityProgress
+						// Use requestAnimationFrame for smooth DOM updates
+						requestAnimationFrame(() => {
+							if (progress <= 0.1) {
+								const navProgress = progress / 0.1
+								const opacity = 1 - navProgress
+								if (navRef.current) {
+									gsap.set(navRef.current, { opacity })
+								}
 							} else {
-								opacity = 1
+								if (navRef.current) {
+									gsap.set(navRef.current, { opacity: 0 })
+								}
 							}
 
-							if (heroImgRef.current)
-								gsap.set(heroImgRef.current, {
-									transform: `translateZ(${translateZ}px)`,
-									opacity,
-								})
-						} else {
-							if (heroImgRef.current)
-								gsap.set(heroImgRef.current, {
-									transform: 'translateZ(0px)',
-									opacity: 1,
-								})
-						}
+							if (progress <= 0.25) {
+								const zProgress = progress / 0.25
+								const translateZ = zProgress * -500
+
+								let opacity = 1
+								if (progress >= 0.2) {
+									const fadeProgress = Math.min(
+										(progress - 0.2) / (0.25 - 0.2),
+										1,
+									)
+									opacity = 1 - fadeProgress
+								}
+
+								if (headerRef.current) {
+									gsap.set(headerRef.current, {
+										transform: `translate(-50%, -50%) translateZ(${translateZ}px)`,
+										opacity,
+									})
+								}
+							} else {
+								if (headerRef.current) {
+									gsap.set(headerRef.current, { opacity: 0 })
+								}
+							}
+
+							if (progress < 0.6) {
+								if (heroImgRef.current) {
+									gsap.set(heroImgRef.current, {
+										transform: 'translateZ(1000px)',
+										opacity: 0,
+									})
+								}
+							} else if (progress >= 0.6 && progress <= 0.9) {
+								const imgProgress = (progress - 0.6) / (0.9 - 0.6)
+								const translateZ = 1000 - imgProgress * 1000
+
+								let opacity = 0
+								if (progress <= 0.8) {
+									const opacityProgress = (progress - 0.6) / (0.8 - 0.6)
+									opacity = opacityProgress
+								} else {
+									opacity = 1
+								}
+
+								if (heroImgRef.current) {
+									gsap.set(heroImgRef.current, {
+										transform: `translateZ(${translateZ}px)`,
+										opacity,
+									})
+								}
+							} else {
+								if (heroImgRef.current) {
+									gsap.set(heroImgRef.current, {
+										transform: 'translateZ(0px)',
+										opacity: 1,
+									})
+								}
+							}
+						})
 					},
 				})
 			}
 
+			// Throttled resize handler for better performance
+			let resizeTimeout: NodeJS.Timeout
 			const handleResize = () => {
-				setCanvasSize()
-				render()
-				ScrollTrigger.refresh()
+				clearTimeout(resizeTimeout)
+				resizeTimeout = setTimeout(() => {
+					setCanvasSize()
+					render()
+					ScrollTrigger.refresh()
+				}, 100)
 			}
 
-			window.addEventListener('resize', handleResize)
+			window.addEventListener('resize', handleResize, { passive: true })
 
 			// Kick off prioritized, limited-concurrency loading
 			startNextLoad()
 
 			return () => {
 				window.removeEventListener('resize', handleResize)
+				clearTimeout(resizeTimeout)
 				if (scrollTriggerInstance) {
 					scrollTriggerInstance.kill()
 				}
+				// Clean up images to free memory
+				images.forEach((img) => {
+					if (img) {
+						img.src = ''
+						img.onload = null
+						img.onerror = null
+					}
+				})
 			}
 		},
-		{ scope: containerRef },
+		{ scope: containerRef, dependencies: [isInitialized] },
 	)
 
 	return (

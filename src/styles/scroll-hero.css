@@ -68,6 +68,12 @@ canvas {
 	height: 100%;
 	object-fit: cover;
 	min-height: 100svh;
+	will-change: transform;
+	transform: translateZ(0); /* Force hardware acceleration */
+	backface-visibility: hidden;
+	image-rendering: optimizeSpeed; /* Faster rendering */
+	image-rendering: -webkit-optimize-contrast; /* Safari optimization */
+	image-rendering: crisp-edges; /* Sharp edges for better performance */
 }
 
 .hero-content {
@@ -94,6 +100,8 @@ canvas {
 	color: var(--fg);
 	transform-origin: center;
 	will-change: transform, opacity;
+	backface-visibility: hidden;
+	transform-style: preserve-3d;
 }
 
 .header h1 {
@@ -136,6 +144,8 @@ canvas {
 	transform: translateZ(1000px);
 	opacity: 0;
 	will-change: transform, opacity;
+	backface-visibility: hidden;
+	transform-style: preserve-3d;
 }
 
 @media (max-width: 1000px) {

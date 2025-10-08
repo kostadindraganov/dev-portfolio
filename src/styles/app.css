@@ -70,7 +70,7 @@
 	}
 
 	html {
-		accent-color: var(--color-accent);
+		accent-color: var(--base-500);
 		caret-color: var(--color-accent);
 		scroll-behavior: smooth;
 	}

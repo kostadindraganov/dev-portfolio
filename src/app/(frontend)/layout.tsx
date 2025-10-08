@@ -21,9 +21,10 @@ export default async function RootLayout({
 	return (
 		<Root>
 			{/* <GoogleTagManager gtmId="" /> */}
+
 			<body className="bg-canvas text-ink antialiased">
+				<Preloader />
 				<ClientLayout>
-					{/* <Preloader /> */}
 					<NuqsAdapter>
 						<SkipToContent />
 						<Announcement />
