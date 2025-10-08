@@ -6,5 +6,5 @@ import type { ComponentProps } from 'react'
 export default function Root(props: ComponentProps<'html'>) {
 	const lang = getLang()
 
-	return <html lang={lang} {...props} />
+	return <html lang={lang} {...props} data-scroll-behavior="smooth" />
 }

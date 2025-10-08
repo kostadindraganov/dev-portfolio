@@ -23,11 +23,11 @@ export default async function RootLayout({
 			{/* <GoogleTagManager gtmId="" /> */}
 			<body className="bg-canvas text-ink antialiased">
 				<ClientLayout>
-					<Preloader />
+					{/* <Preloader /> */}
 					<NuqsAdapter>
 						<SkipToContent />
 						<Announcement />
-						<Header />
+						{/* <Header /> */}
 						<main id="main-content" role="main" tabIndex={-1}>
 							{children}
 						</main>

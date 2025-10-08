@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './fonts.css';
+@import './scroll-hero.css';
 
 :root {
 	--base-100: rgb(242, 237, 230);
@@ -30,6 +31,9 @@
 @layer base {
 	* {
 		min-width: 0;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
 	}
 
 	[hidden] {
@@ -109,9 +113,9 @@
 		display: none;
 	}
 
-	/* hr {
+	hr {
 		@apply border-ink/10;
-	} */
+	}
 }
 
 img {

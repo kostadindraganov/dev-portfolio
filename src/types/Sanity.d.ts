@@ -230,6 +230,13 @@ declare global {
 		}
 
 		// modules
+		interface ScrollHero extends Module<'scroll-hero'> {
+			pretitle?: string
+			content?: any
+			ctas?: CTA[]
+			assets?: Img[]
+			assetFaded?: boolean
+		}
 		interface BlogList extends Module<'blog-list'> {
 			pretitle?: string
 			intro?: any

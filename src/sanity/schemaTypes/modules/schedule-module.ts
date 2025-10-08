@@ -30,6 +30,7 @@ export default defineType({
 				{ type: 'hero' },
 				{ type: 'hero.saas' },
 				{ type: 'hero.split' },
+				{ type: 'scroll.hero' },
 				{ type: 'testimonial.featured' },
 			],
 			options: {
@@ -42,7 +43,12 @@ export default defineType({
 						},
 						{ name: 'list' },
 					],
-					groups: [{ name: 'hero', of: ['hero', 'hero.saas', 'hero.split'] }],
+					groups: [
+						{
+							name: 'hero',
+							of: ['hero', 'hero.saas', 'hero.split', 'scroll.hero'],
+						},
+					],
 				},
 			},
 		}),

@@ -11,6 +11,7 @@ import FlagList from './FlagList'
 import Hero from './Hero'
 import HeroSplit from './HeroSplit'
 import HeroSaaS from './HeroSaaS'
+import ScrollHero from './ScrollHero/ScrollHero'
 import LogoList from './LogoList'
 import RichtextModule from './RichtextModule'
 import ScheduleModule from './ScheduleModule'
@@ -41,6 +42,7 @@ const MODULE_MAP = {
 	hero: Hero,
 	'hero.split': HeroSplit,
 	'hero.saas': HeroSaaS,
+	'scroll.hero': ScrollHero,
 	'logo-list': LogoList,
 	'person-list': dynamic(() => import('./PersonList')),
 	'pricing-list': dynamic(() => import('./PricingList')),
@@ -87,15 +89,16 @@ export default function Modules({
 
 				return (
 					<Component
-						{...module}
-						{...getAdditionalProps(module)}
+						{...(module as any)}
+						{...(getAdditionalProps(module) as any)}
 						data-sanity={
-							!!page?._id &&
-							createDataAttribute({
-								id: page._id,
-								type: page?._type,
-								path: `page[_key == "${module._key}"]`,
-							}).toString()
+							page?._id
+								? createDataAttribute({
+										id: page._id,
+										type: page._type,
+										path: `page[_key == "${module._key}"]`,
+									}).toString()
+								: undefined
 						}
 						key={module._key}
 					/>
