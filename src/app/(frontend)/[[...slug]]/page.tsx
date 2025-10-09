@@ -30,6 +30,7 @@ export async function generateStaticParams() {
 			_type == 'page'
 			&& defined(metadata.slug.current)
 			&& !(metadata.slug.current in ['index'])
+			&& !(metadata.slug.current match "*/*")
 		]{
 			'slug': metadata.slug.current
 		}`,
