@@ -19,7 +19,6 @@ import { supportedLanguages } from '@/lib/i18n'
 import { documentInternationalization } from '@sanity/document-internationalization'
 import { schemaTypes } from './src/sanity/schemaTypes'
 import resolveUrl from '@/lib/resolveUrl'
-import { netlifyWidget } from 'sanity-plugin-dashboard-widget-netlify'
 import { youtubeInput } from 'sanity-plugin-youtube-input'
 
 const singletonTypes = ['site']
@@ -39,18 +38,6 @@ export default defineConfig({
 			title: 'Deployment',
 			widgets: [
 				vercelWidget(),
-				netlifyWidget({
-					title: 'kokodev.netlify.app',
-					sites: [
-						{
-							title: 'kokodev.netlify.app',
-							apiId: '82bce906-38e2-441d-8c20-fb4935d1c11a',
-							buildHookId: '68dd94d58c1741007934bfb5',
-							name: 'kokodev',
-							url: 'https://kokodev.netlify.app',
-						},
-					],
-				}),
 			],
 		}),
 		dashboardTool({
