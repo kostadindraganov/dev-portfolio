@@ -26,29 +26,45 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-	const slugs = await client.fetch<string[]>(
-		groq`*[_type == 'blog.post' && defined(metadata.slug.current)].metadata.slug.current`,
-	)
+	try {
+		const slugs = await client.fetch<string[]>(
+			groq`*[_type == 'blog.post' && defined(metadata.slug.current)].metadata.slug.current`,
+		)
 
-	// Return empty array if no blog posts exist to avoid prerendering issues
-	if (!slugs || slugs.length === 0) {
+		// Return empty array if no blog posts exist to avoid prerendering issues
+		if (!slugs || slugs.length === 0) {
+			return []
+		}
+
+		return slugs.map((slug) => ({ slug: slug.split('/') }))
+	} catch (error) {
+		console.error('Error fetching blog post slugs:', error)
 		return []
 	}
-
-	return slugs.map((slug) => ({ slug: slug.split('/') }))
 }
 
 async function getPost(params: Params) {
-	const blogTemplateExists = await fetchSanityLive<boolean>({
-		query: groq`count(*[_type == 'global-module' && path == '${BLOG_DIR}/']) > 0`,
-	})
+	try {
+		const blogTemplateExists = await fetchSanityLive<boolean>({
+			query: groq`count(*[_type == 'global-module' && path == '${BLOG_DIR}/']) > 0`,
+		})
 
-	if (!blogTemplateExists) throw new Error(errors.missingBlogTemplate)
+		if (!blogTemplateExists) {
+			console.error('Blog template not found:', errors.missingBlogTemplate)
+			return null
+		}
+	} catch (error) {
+		console.error('Error checking blog template:', error)
+		return null
+	}
 
 	const { slug, lang } = processSlug(params)
 
-	return await fetchSanityLive<Sanity.BlogPost & { modules: Sanity.Module[] }>({
-		query: groq`*[
+	try {
+		return await fetchSanityLive<
+			Sanity.BlogPost & { modules: Sanity.Module[] }
+		>({
+			query: groq`*[
 			_type == 'blog.post'
 			&& metadata.slug.current == $slug
 			${lang ? `&& language == '${lang}'` : ''}
@@ -84,8 +100,12 @@ async function getPost(params: Params) {
 			),
 			${TRANSLATIONS_QUERY},
 		}`,
-		params: { slug },
-	})
+			params: { slug },
+		})
+	} catch (error) {
+		console.error('Error fetching blog post:', error)
+		return null
+	}
 }
 
 type Params = { slug: string[] }

@@ -25,25 +25,31 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-	const slugs = await client.fetch<{ slug: string }[]>(
-		groq`*[
-			_type == 'page'
-			&& defined(metadata.slug.current)
-			&& !(metadata.slug.current in ['index'])
-			&& !(metadata.slug.current match "*/*")
-		]{
-			'slug': metadata.slug.current
-		}`,
-	)
+	try {
+		const slugs = await client.fetch<{ slug: string }[]>(
+			groq`*[
+				_type == 'page'
+				&& defined(metadata.slug.current)
+				&& !(metadata.slug.current in ['index'])
+				&& !(metadata.slug.current match "*/*")
+			]{
+				'slug': metadata.slug.current
+			}`,
+		)
 
-	return slugs.map(({ slug }) => ({ slug: slug.split('/') }))
+		return slugs.map(({ slug }) => ({ slug: slug.split('/') }))
+	} catch (error) {
+		console.error('Error fetching page slugs:', error)
+		return []
+	}
 }
 
 async function getPage(params: Params) {
 	const { slug, lang } = processSlug(params)
 
-	const page = await fetchSanityLive<Sanity.Page>({
-		query: groq`*[
+	try {
+		const page = await fetchSanityLive<Sanity.Page>({
+			query: groq`*[
 			_type == 'page'
 			&& metadata.slug.current == $slug
 			${lang ? `&& language == '${lang}'` : ''}
@@ -67,12 +73,19 @@ async function getPage(params: Params) {
 			},
 			${TRANSLATIONS_QUERY},
 		}`,
-		params: { slug },
-	})
+			params: { slug },
+		})
 
-	if (slug === 'index' && !page) throw new Error(errors.missingHomepage)
+		if (slug === 'index' && !page) {
+			console.error('Missing homepage:', errors.missingHomepage)
+			return null
+		}
 
-	return page
+		return page
+	} catch (error) {
+		console.error('Error fetching page:', error)
+		return null
+	}
 }
 
 type Params = { slug?: string[] }
