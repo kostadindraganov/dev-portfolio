@@ -30,6 +30,11 @@ export async function generateStaticParams() {
 		groq`*[_type == 'blog.post' && defined(metadata.slug.current)].metadata.slug.current`,
 	)
 
+	// Return empty array if no blog posts exist to avoid prerendering issues
+	if (!slugs || slugs.length === 0) {
+		return []
+	}
+
 	return slugs.map((slug) => ({ slug: slug.split('/') }))
 }
 
