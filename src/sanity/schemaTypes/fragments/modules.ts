@@ -21,6 +21,7 @@ export default defineField({
 		{ type: 'hero' },
 		{ type: 'hero.saas' },
 		{ type: 'hero.split' },
+		{ type: 'home.portfolio' },
 		{ type: 'scroll.hero' },
 		{ type: 'logo-list' },
 		{ type: 'person-list' },

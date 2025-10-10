@@ -237,6 +237,9 @@ declare global {
 			assets?: Img[]
 			assetFaded?: boolean
 		}
+		interface HomePortfolio extends Module<'home.portfolio'> {
+			title?: string
+		}
 		interface BlogList extends Module<'blog-list'> {
 			pretitle?: string
 			intro?: any

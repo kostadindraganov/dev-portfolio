@@ -11,6 +11,7 @@ import FlagList from './FlagList'
 import Hero from './Hero'
 import HeroSplit from './HeroSplit'
 import HeroSaaS from './HeroSaaS'
+import HomePortfolio from './HomePortfolio'
 import ScrollHero from './ScrollHero/ScrollHero'
 import LogoList from './LogoList'
 import RichtextModule from './RichtextModule'
@@ -42,6 +43,7 @@ const MODULE_MAP = {
 	hero: Hero,
 	'hero.split': HeroSplit,
 	'hero.saas': HeroSaaS,
+	'home.portfolio': HomePortfolio,
 	'scroll.hero': ScrollHero,
 	'logo-list': LogoList,
 	'person-list': dynamic(() => import('./PersonList')),
