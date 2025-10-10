@@ -1,12 +1,18 @@
-export const metadata = {
-	title: 'About - Kostadin Draganov',
-	description: 'About Kostadin Draganov - Senior Software Developer',
-}
+import Nav from '@/ui/Nav/Nav'
+import '@/styles/app.css'
+import '@/styles/preloader.css'
 
-export default function AboutLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
-	return <>{children}</>
+	return (
+		<>
+			<Nav />
+			<main id="main-content" role="main" tabIndex={-1}>
+				{children}
+			</main>
+		</>
+	)
 }

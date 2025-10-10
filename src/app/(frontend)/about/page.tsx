@@ -28,8 +28,8 @@ const AboutPage = () => {
 	}, [])
 
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center bg-[#0d1117] p-4 text-gray-300 sm:p-8 md:p-6">
-			<div className="max-w-8xl mx-auto w-full overflow-hidden rounded-lg border border-gray-700 bg-[#161b22]/50 shadow-2xl backdrop-blur-sm">
+		<div className="flex min-h-screen flex-col items-center justify-center p-4 text-gray-300 sm:p-8 md:p-6">
+			<div className="max-w-8xl mx-auto w-full overflow-hidden rounded-lg border border-gray-700 bg-[#161b22] shadow-2xl backdrop-blur-sm">
 				{/* Window Header */}
 				<header className="flex items-center bg-[#0d1117] p-3">
 					<div className="flex space-x-2">
