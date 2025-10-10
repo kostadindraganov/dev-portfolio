@@ -113,13 +113,13 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		min-height: 100svh;
+		/* min-height: 100svh;
 		will-change: transform;
-		transform: translateZ(0); /* Force hardware acceleration */
+		transform: translateZ(0); 
 		backface-visibility: hidden;
-		image-rendering: optimizeSpeed; /* Faster rendering */
-		image-rendering: -webkit-optimize-contrast; /* Safari optimization */
-		image-rendering: crisp-edges; /* Sharp edges for better performance */
+		image-rendering: optimizeSpeed; 
+		image-rendering: -webkit-optimize-contrast; 
+		image-rendering: crisp-edges;  */
 	}
 
 	.hero-content {
