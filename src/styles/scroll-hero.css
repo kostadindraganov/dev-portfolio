@@ -198,9 +198,10 @@
 		}
 
 		.header h1,
+		.header h1 p,
 		.client-logos,
 		.hero-img-container {
-			width: calc(100% - 4rem);
+			font-size: 2rem;
 		}
 	}
 }

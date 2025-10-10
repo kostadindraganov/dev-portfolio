@@ -24,6 +24,9 @@ export default function ScrollHero({
 	...props
 }: Partial<Sanity.ScrollHero> & Sanity.Module) {
 	gsap.registerPlugin(ScrollTrigger)
+if (typeof window !== 'undefined') {
+	ScrollTrigger.normalizeScroll(true)
+}
 
 	const pathname = usePathname()
 	const [isInitialized, setIsInitialized] = useState(false)
@@ -61,18 +64,17 @@ export default function ScrollHero({
 			let scrollTriggerInstance: ScrollTrigger | null = null
 			const canvas = canvasRef.current
 			if (!canvas) return
-			const context = canvas.getContext('2d')
+			const context = canvas.getContext('2d', { willReadFrequently: true })
 			if (!context) return
 			contextRef.current = context
 
 			const setCanvasSize = () => {
 				const pixelRatio = window.devicePixelRatio || 1
-				// Cap DPR to reduce initial decode and draw costs on very high-DPR screens
 				const cappedRatio = Math.min(1.5, pixelRatio)
 				canvas.width = window.innerWidth * cappedRatio
 				canvas.height = window.innerHeight * cappedRatio
-				canvas.style.width = window.innerWidth + 'px'
-				canvas.style.height = window.innerHeight + 'px'
+				canvas.style.width = `${window.innerWidth}px`
+				canvas.style.height = `${window.innerHeight}px`
 				context.setTransform(1, 0, 0, 1, 0, 0)
 				context.scale(cappedRatio, cappedRatio)
 			}
@@ -80,16 +82,18 @@ export default function ScrollHero({
 			setCanvasSize()
 
 			const frameCount = 207
-			const MAX_CONCURRENCY = 8
-			const PRELOAD_BEFORE_ACTIVATION = 1 // initialize as soon as the first frame is ready
+			const MAX_CONCURRENCY = 10 // Increased concurrency
+			const PRELOAD_BEFORE_ACTIVATION = 20 // Start animation after more frames are loaded
 			const currentFrame = (index: number) =>
 				`/frames/frame_${(index + 1).toString().padStart(4, '0')}.webp`
 
-			let images: HTMLImageElement[] = new Array(frameCount)
+			let images: (HTMLImageElement | ImageBitmap)[] = new Array(frameCount)
 			let nextIndexToLoad = 0
 			let inFlight = 0
 			let loadedCount = 0
 			let scrollTriggerInitialized = false
+
+			const useImageBitmap = 'createImageBitmap' in window
 
 			const maybeInitScrollTrigger = () => {
 				if (
@@ -106,37 +110,42 @@ export default function ScrollHero({
 				while (inFlight < MAX_CONCURRENCY && nextIndexToLoad < frameCount) {
 					const idx = nextIndexToLoad++
 					inFlight++
+
 					const img = new Image()
-
-					// Performance optimizations for image loading
 					img.crossOrigin = 'anonymous'
-					img.loading = 'eager' // Load immediately for scroll animation
+					img.loading = 'eager'
 					;(img as any).decoding = 'async'
-
-					// Prioritize first frames for immediate display
 					try {
-						;(img as any).fetchPriority = idx < 6 ? 'high' : 'auto'
+						;(img as any).fetchPriority = idx < 10 ? 'high' : 'auto'
 					} catch {}
 
 					img.onload = () => {
-						images[idx] = img
-						lastLoadedFrameRef.current = Math.max(
-							lastLoadedFrameRef.current,
-							idx,
-						)
-						loadedCount++
-						inFlight--
-						maybeInitScrollTrigger()
-
-						// Only render if this is an important frame
-						if (idx < 10 || idx % 5 === 0) {
-							render()
+						if (useImageBitmap) {
+							createImageBitmap(img).then((bitmap) => {
+								images[idx] = bitmap
+								finalizeLoad()
+							})
+						} else {
+							images[idx] = img
+							finalizeLoad()
 						}
 
-						startNextLoad()
+						function finalizeLoad() {
+							lastLoadedFrameRef.current = Math.max(
+								lastLoadedFrameRef.current,
+								idx,
+							)
+							loadedCount++
+							inFlight--
+							maybeInitScrollTrigger()
+							if (idx < PRELOAD_BEFORE_ACTIVATION || idx % 5 === 0) {
+								render()
+							}
+							startNextLoad()
+						}
 					}
+
 					img.onerror = () => {
-						// Treat errors as loaded to avoid stalling the queue
 						loadedCount++
 						inFlight--
 						maybeInitScrollTrigger()
@@ -146,7 +155,7 @@ export default function ScrollHero({
 				}
 			}
 
-			imagesRef.current = images
+			imagesRef.current = images as HTMLImageElement[] // Keep original ref type for now
 
 			const render = () => {
 				if (!contextRef.current) return
@@ -156,126 +165,95 @@ export default function ScrollHero({
 
 				ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 
-				// If the target frame is not loaded yet, fall back to the last loaded frame
 				const desired = videoFramesRef.current.frame
 				const safeIndex = Math.min(desired, lastLoadedFrameRef.current)
 				const img = images[safeIndex]
 
-				if (img && img.complete && img.naturalWidth > 0) {
-					const imageAspect = img.naturalWidth / img.naturalHeight
-					const canvasAspect = canvasWidth / canvasHeight
+				if (img) {
+					const naturalWidth =
+						img instanceof HTMLImageElement ? img.naturalWidth : img.width
+					const naturalHeight =
+						img instanceof HTMLImageElement ? img.naturalHeight : img.height
 
-					let drawWidth: number
-					let drawHeight: number
-					let drawX: number
-					let drawY: number
+					if (naturalWidth > 0) {
+						const imageAspect = naturalWidth / naturalHeight
+						const canvasAspect = canvasWidth / canvasHeight
+						let drawWidth, drawHeight, drawX, drawY
 
-					if (imageAspect > canvasAspect) {
-						drawHeight = canvasHeight
-						drawWidth = drawHeight * imageAspect
-						drawX = (canvasWidth - drawWidth) / 2
-						drawY = 0
-					} else {
-						drawWidth = canvasWidth
-						drawHeight = drawWidth / imageAspect
-						drawX = 0
-						drawY = (canvasHeight - drawHeight) / 2
+						if (imageAspect > canvasAspect) {
+							drawHeight = canvasHeight
+							drawWidth = drawHeight * imageAspect
+							drawX = (canvasWidth - drawWidth) / 2
+							drawY = 0
+						} else {
+							drawWidth = canvasWidth
+							drawHeight = drawWidth / imageAspect
+							drawX = 0
+							drawY = (canvasHeight - drawHeight) / 2
+						}
+						ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight)
 					}
-
-					ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight)
 				}
 			}
 
 			const setupScrollTrigger = () => {
+				gsap.set(headerRef.current, { transform: 'translate(-50%, -50%)' })
+				const navOpacity = gsap.quickSetter(navRef.current, 'opacity')
+				const headerZ = gsap.quickSetter(headerRef.current, 'z', 'px')
+				const headerOpacity = gsap.quickSetter(headerRef.current, 'opacity')
+				const heroImgZ = gsap.quickSetter(heroImgRef.current, 'z', 'px')
+				const heroImgOpacity = gsap.quickSetter(heroImgRef.current, 'opacity')
+
 				scrollTriggerInstance = ScrollTrigger.create({
 					trigger: '.hero',
 					start: 'top top',
 					end: `+=${window.innerHeight * 7}px`,
 					pin: true,
 					pinSpacing: true,
-					scrub: 0.5, // Smoother scrub for better performance
+					scrub: 0.5,
 					onUpdate: (self) => {
 						const progress = self.progress
-
 						const animationProgress = Math.min(progress, 1)
-						const targetFrame = Math.round(animationProgress * (frameCount - 1))
-
+						const targetFrame = Math.round(
+							animationProgress * (frameCount - 1),
+						)
 						videoFramesRef.current.frame = targetFrame
 						render()
 
-						// Use requestAnimationFrame for smooth DOM updates
-						requestAnimationFrame(() => {
-							if (progress <= 0.1) {
-								const navProgress = progress / 0.1
-								const opacity = 1 - navProgress
-								if (navRef.current) {
-									gsap.set(navRef.current, { opacity })
-								}
-							} else {
-								if (navRef.current) {
-									gsap.set(navRef.current, { opacity: 0 })
-								}
+						// Nav opacity
+						if (progress <= 0.1) {
+							navOpacity(1 - progress / 0.1)
+						} else {
+							navOpacity(0)
+						}
+
+						// Header animations
+						if (progress <= 0.25) {
+							const zProgress = progress / 0.25
+							headerZ(zProgress * -500)
+							let opacity = 1
+							if (progress >= 0.2) {
+								opacity = 1 - (progress - 0.2) / 0.05
 							}
+							headerOpacity(opacity)
+						} else {
+							headerOpacity(0)
+						}
 
-							if (progress <= 0.25) {
-								const zProgress = progress / 0.25
-								const translateZ = zProgress * -500
-
-								let opacity = 1
-								if (progress >= 0.2) {
-									const fadeProgress = Math.min(
-										(progress - 0.2) / (0.25 - 0.2),
-										1,
-									)
-									opacity = 1 - fadeProgress
-								}
-
-								if (headerRef.current) {
-									gsap.set(headerRef.current, {
-										transform: `translate(-50%, -50%) translateZ(${translateZ}px)`,
-										opacity,
-									})
-								}
-							} else {
-								if (headerRef.current) {
-									gsap.set(headerRef.current, { opacity: 0 })
-								}
-							}
-
-							if (progress < 0.6) {
-								if (heroImgRef.current) {
-									gsap.set(heroImgRef.current, {
-										transform: 'translateZ(1000px)',
-										opacity: 0,
-									})
-								}
-							} else if (progress >= 0.6 && progress <= 0.9) {
-								const imgProgress = (progress - 0.6) / (0.9 - 0.6)
-								const translateZ = 1000 - imgProgress * 1000
-
-								let opacity = 0
-								if (progress <= 0.8) {
-									const opacityProgress = (progress - 0.6) / (0.8 - 0.6)
-									opacity = opacityProgress
-								} else {
-									opacity = 1
-								}
-
-								if (heroImgRef.current) {
-									gsap.set(heroImgRef.current, {
-										transform: `translateZ(${translateZ}px)`,
-										opacity,
-									})
-								}
-							} else {
-								if (heroImgRef.current) {
-									gsap.set(heroImgRef.current, {
-										transform: 'translateZ(0px)',
-										opacity: 1,
-									})
-								}
-							}
-						})
+						// Hero image animations
+						if (progress < 0.6) {
+							heroImgZ(1000)
+							heroImgOpacity(0)
+						} else if (progress <= 0.9) {
+							const imgProgress = (progress - 0.6) / 0.3
+							heroImgZ(1000 - imgProgress * 1000)
+							let opacity =
+								progress <= 0.8 ? (progress - 0.6) / 0.2 : 1
+							heroImgOpacity(opacity)
+						} else {
+							heroImgZ(0)
+							heroImgOpacity(1)
+						}
 					},
 				})
 			}
