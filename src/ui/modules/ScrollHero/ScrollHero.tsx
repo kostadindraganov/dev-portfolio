@@ -282,7 +282,7 @@ if (typeof window !== 'undefined') {
 				}
 				// Clean up images to free memory
 				images.forEach((img) => {
-					if (img) {
+					if (img && img instanceof HTMLImageElement) {
 						img.src = ''
 						img.onload = null
 						img.onerror = null
