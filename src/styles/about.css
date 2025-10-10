@@ -1,0 +1,121 @@
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
+}
+.cursor-blink {
+	animation: blink 1s step-end infinite;
+}
+@keyframes slideInFadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-50px) scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+.profile-image-animation {
+	animation: slideInFadeIn 0.8s ease-out forwards;
+	width: 18rem;
+}
+
+.glowing-btn {
+	position: relative;
+	display: inline-block;
+	padding: 15px 30px;
+	color: #2196f3;
+	background: transparent;
+	text-decoration: none;
+	text-transform: uppercase;
+	overflow: hidden;
+	transition: 0.5s;
+	letter-spacing: 4px;
+	border: 1px solid #2196f3;
+}
+.glowing-btn:hover {
+	background: #2196f3;
+	color: #fff;
+	border-radius: 5px;
+	box-shadow:
+		0 0 5px #2196f3,
+		0 0 25px #2196f3,
+		0 0 50px #2196f3,
+		0 0 100px #2196f3;
+}
+.glowing-btn span {
+	position: absolute;
+	display: block;
+}
+.glowing-btn span:nth-child(1) {
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, #2196f3);
+	animation: animate1 1.5s linear infinite;
+}
+@keyframes animate1 {
+	0% {
+		left: -100%;
+	}
+	50%,
+	100% {
+		left: 100%;
+	}
+}
+.glowing-btn span:nth-child(2) {
+	top: -100%;
+	right: 0;
+	width: 2px;
+	height: 100%;
+	background: linear-gradient(180deg, transparent, #2196f3);
+	animation: animate2 1.5s linear infinite;
+	animation-delay: 0.375s;
+}
+@keyframes animate2 {
+	0% {
+		top: -100%;
+	}
+	50%,
+	100% {
+		top: 100%;
+	}
+}
+.glowing-btn span:nth-child(3) {
+	bottom: 0;
+	right: -100%;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(270deg, transparent, #2196f3);
+	animation: animate3 1.5s linear infinite;
+	animation-delay: 0.75s;
+}
+@keyframes animate3 {
+	0% {
+		right: -100%;
+	}
+	50%,
+	100% {
+		right: 100%;
+	}
+}
+.glowing-btn span:nth-child(4) {
+	bottom: -100%;
+	left: 0;
+	width: 2px;
+	height: 100%;
+	background: linear-gradient(360deg, transparent, #2196f3);
+	animation: animate4 1.5s linear infinite;
+	animation-delay: 1.125s;
+}
+@keyframes animate4 {
+	0% {
+		bottom: -100%;
+	}
+	50%,
+	100% {
+		bottom: 100%;
+	}
+}

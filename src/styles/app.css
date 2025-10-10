@@ -3,7 +3,7 @@
 
 @import './scroll-hero.css';
 @import './footer.css';
-
+@import './about.css';
 :root {
 	--base-100: rgb(242, 237, 230);
 	--base-200: rgb(204, 200, 194);
