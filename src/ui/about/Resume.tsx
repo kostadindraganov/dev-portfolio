@@ -1075,7 +1075,7 @@ export const Resume: React.FC<ResumeProps> = ({ onTypingComplete }) => {
 					{/* Header Section */}
 					<div className="mb-8 flex flex-col items-center gap-8 sm:flex-row">
 						<Image
-							src="/images/global/KostadinDraganov.jpg"
+							src="/images/global/KostadinDraganov.webp"
 							alt="Kostadin Draganov"
 							width={224}
 							height={224}
