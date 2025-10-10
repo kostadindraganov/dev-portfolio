@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import './fonts.css';
+
 @import './scroll-hero.css';
+@import './footer.css';
 
 :root {
 	--base-100: rgb(242, 237, 230);
@@ -11,6 +13,14 @@
 	--base-400: rgb(102, 95, 86);
 	--base-450: rgb(31, 29, 29);
 	--base-500: rgb(20, 19, 19);
+
+	--bg: #edf1e8;
+	--bg2: #d7dbd2;
+	--fg: #241910;
+	--accent1: #ed6a5a;
+	--accent2: #f4f1bb;
+	--accent3: #9bc1bc;
+	--accent4: #5d576b;
 }
 
 @theme {

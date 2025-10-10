@@ -1,12 +1,13 @@
 'use client'
 
-// import moduleProps from '@/lib/moduleProps'
-// import Pretitle from '@/ui/Pretitle'
-// import { PortableText } from 'next-sanity'
-// import Code from './RichtextModule/Code'
-// import CustomHTML from './CustomHTML'
-// import Reputation from '@/ui/Reputation'
-// import CTAList from '@/ui/CTAList'
+import moduleProps from '@/lib/moduleProps'
+import Pretitle from '@/ui/Pretitle'
+import { PortableText } from 'next-sanity'
+import Code from '../RichtextModule/Code'
+import CustomHTML from '../CustomHTML'
+import Reputation from '@/ui/Reputation'
+import CTAList from '@/ui/CTAList'
+
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
@@ -315,7 +316,7 @@ export default function ScrollHero({
 	)
 
 	return (
-		<div ref={containerRef}>
+		<div ref={containerRef} className="scroll-hero">
 			<nav ref={navRef}>
 				<div className="nav-links">
 					<a href="#">Overview</a>
@@ -337,7 +338,7 @@ export default function ScrollHero({
 				</div>
 			</nav>
 
-			<section className="hero">
+			<section className="hero" {...moduleProps(props)}>
 				<canvas
 					ref={canvasRef}
 					style={{
@@ -347,23 +348,34 @@ export default function ScrollHero({
 					}}
 				></canvas>
 
-				<div className="hero-content">
+				<div className="hero-content mt-2">
 					<div className="header" ref={headerRef}>
-						<h1>One unified workspace to build, test, and ship AI faster</h1>
-						<p>Trusted by</p>
-						<div className="client-logos">
-							<div className="client-logo">
-								<img src="/client-logo-1.png" alt="" />
-							</div>
-							<div className="client-logo">
-								<img src="/client-logo-2.png" alt="" />
-							</div>
-							<div className="client-logo">
-								<img src="/client-logo-3.png" alt="" />
-							</div>
-							<div className="client-logo">
-								<img src="/client-logo-4.png" alt="" />
-							</div>
+						{/* <h2>{pretitle}</h2> */}
+						<h1>
+							<PortableText
+								value={content}
+								components={{
+									types: {
+										code: ({ value }) => (
+											<Code
+												value={value}
+												className="mx-auto mt-6! max-w-max"
+												theme="snazzy-light"
+											/>
+										),
+										'custom-html': ({ value }) => <CustomHTML {...value} />,
+										'reputation-block': ({ value }) => (
+											<Reputation
+												className="!mt-4 justify-center"
+												reputation={value.reputation}
+											/>
+										),
+									},
+								}}
+							/>
+						</h1>
+						<div className="flex justify-center">
+							<CTAList ctas={ctas} className="!mt-8 justify-center" />
 						</div>
 					</div>
 				</div>
@@ -380,34 +392,4 @@ export default function ScrollHero({
 			</section>
 		</div>
 	)
-
-	// return (
-	// 	<section className="section space-y-8 text-center" {...moduleProps(props)}>
-	// 		<div className="richtext mx-auto max-w-2xl text-balance">
-	// 			<Pretitle>{pretitle}</Pretitle>
-	// 			<PortableText
-	// 				value={content}
-	// 				components={{
-	// 					types: {
-	// 						code: ({ value }) => (
-	// 							<Code
-	// 								value={value}
-	// 								className="mx-auto mt-6! max-w-max"
-	// 								theme="snazzy-light"
-	// 							/>
-	// 						),
-	// 						'custom-html': ({ value }) => <CustomHTML {...value} />,
-	// 						'reputation-block': ({ value }) => (
-	// 							<Reputation
-	// 								className="!mt-4 justify-center"
-	// 								reputation={value.reputation}
-	// 							/>
-	// 						),
-	// 					},
-	// 				}}
-	// 			/>
-	// 			<CTAList ctas={ctas} className="!mt-8 justify-center" />
-	// 		</div>
-	// 	</section>
-	// )
 }
