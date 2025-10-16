@@ -786,17 +786,6 @@ const rightColumnData: Line[] = [
 			{ text: ',', type: SyntaxType.Punctuation },
 		],
 	},
-	{
-		indent: 2,
-		parts: [
-			{ text: 'summary', type: SyntaxType.Property },
-			{ text: ': ', type: SyntaxType.Punctuation },
-			{
-				text: "['Wrote code from scratch to meet business requirements.', 'Tested websites and identified technical problems.', 'Coded front-end interfaces with HTML5, CSS3, and JS.', 'Resolved cross-browser and usability issues.']",
-				type: SyntaxType.String,
-			},
-		],
-	},
 	{ indent: 1, parts: [{ text: '}),', type: SyntaxType.Punctuation }] },
 	{
 		indent: 1,
@@ -839,7 +828,7 @@ const rightColumnData: Line[] = [
 			{ text: 'summary', type: SyntaxType.Property },
 			{ text: ': ', type: SyntaxType.Punctuation },
 			{
-				text: "['Digital setup of news, TV shows, and commercials.', 'Supported live events with video/audio equipment.', 'Designed video commercials using After Effects.']",
+				text: "['Designed video commercials using After Effects.']",
 				type: SyntaxType.String,
 			},
 		],
@@ -886,7 +875,7 @@ const rightColumnData: Line[] = [
 			{ text: 'summary', type: SyntaxType.Property },
 			{ text: ': ', type: SyntaxType.Punctuation },
 			{
-				text: "['Developed and maintained unique website designs.', 'Executed advanced SEO campaigns.', 'Created and developed new websites.']",
+				text: "['Developed and maintained unique website']",
 				type: SyntaxType.String,
 			},
 		],
@@ -939,7 +928,7 @@ const rightColumnData: Line[] = [
 			{ text: 'summary', type: SyntaxType.Property },
 			{ text: ': ', type: SyntaxType.Punctuation },
 			{
-				text: "['Performed CMTS router system administration (Linux).', 'Administered systems for cable modems and digital TV.', 'Maintained software for digital television access control.']",
+				text: "['Maintained software for digital television access control.']",
 				type: SyntaxType.String,
 			},
 		],
@@ -989,7 +978,7 @@ const rightColumnData: Line[] = [
 			{ text: 'summary', type: SyntaxType.Property },
 			{ text: ': ', type: SyntaxType.Punctuation },
 			{
-				text: "['Maintained and renovated cable/satellite equipment.', 'Developed and launched digital cable television.', 'Developed access control systems for digital TV.']",
+				text: "['Developed and launched digital cable television.']",
 				type: SyntaxType.String,
 			},
 		],
