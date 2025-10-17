@@ -31,8 +31,8 @@ import { PostProcessing } from './post-processing'
 import TEXTUREMAP from '../../../public/hero/raw-1.webp'
 import DEPTHMAP from '../../../public/hero/depth-1.png'
 
-const WIDTH = 1600
-const HEIGHT = 900
+const WIDTH = 1650
+const HEIGHT = 950
 
 const Scene = () => {
 	const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src], () => {
@@ -130,12 +130,13 @@ const Scene = () => {
 				},
 				onLeaveBack: () => {
 					// Wait 1 second then stop animation and reset
-
-					if (animationTween) {
-						animationTween.kill()
-						animationTween = null
-					}
-					gsap.set(uniforms.uProgress, { value: 0 })
+					setTimeout(() => {
+						if (animationTween) {
+							animationTween.kill()
+							animationTween = null
+						}
+						gsap.set(uniforms.uProgress, { value: 1 })
+					}, 200)
 				},
 			},
 		})
