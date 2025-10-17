@@ -1,6 +1,6 @@
 import Nav from '@/ui/Nav/Nav'
 import '@/styles/app.css'
-import '@/styles/preloader.css'
+import '@/styles/about.css'
 
 export default async function RootLayout({
 	children,

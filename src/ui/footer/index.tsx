@@ -5,8 +5,9 @@ import LanguageSwitcher from '@/ui/LanguageSwitcher'
 import { PortableText } from 'next-sanity'
 import Link from 'next/link'
 import { Img } from '@/ui/Img'
-import ExplosionAnimation from './ExplosionAnimation'
 
+import ExplosionAnimation from './ExplosionAnimation'
+import Copy from '@/ui/Copy/Copy'
 export default async function Footer() {
 	const { title, blurb, logo, copyright } = await getSite()
 
@@ -64,6 +65,7 @@ export default async function Footer() {
 				<div className="footer-header">
 					<h1>Kostadin Draganov</h1>
 				</div>
+
 				<div className="footer-row">
 					<div className="footer-col">
 						<p>Quick Jumps</p>

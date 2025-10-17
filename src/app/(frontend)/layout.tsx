@@ -8,7 +8,8 @@ import Footer from '@/ui/footer'
 import VisualEditingControls from '@/ui/VisualEditingControls'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import Preloader from '@/ui/Preloader'
+// import Preloader from '@/ui/Preloader'
+import TopBar from '@/ui/TopBar/TopBar'
 import ClientLayout from './client-layout'
 import '@/styles/app.css'
 import '@/styles/preloader.css'
@@ -23,9 +24,10 @@ export default async function RootLayout({
 			{/* <GoogleTagManager gtmId="" /> */}
 
 			<body className="bg-canvas text-ink antialiased">
-				<Preloader />
+				{/* <Preloader /> */}
 				<ClientLayout>
 					<NuqsAdapter>
+						<TopBar />
 						<SkipToContent />
 						<Announcement />
 						{/* <Header /> */}
