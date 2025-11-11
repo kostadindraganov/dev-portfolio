@@ -16,16 +16,16 @@ export default async function Menu() {
 						return (
 							<div className="space-y-2 text-start" key={key}>
 								<div className="technical text-canvas/50 text-xs">
-									<CTA link={item.link}>
+									{/* <CTA link={item.link}>
 										{stegaClean(item.link?.label) || item.link?.internal?.title}
-									</CTA>
+									</CTA> */}
 								</div>
 
 								<ul>
 									{item.links?.map((link, key) => (
-										<li key={key}>
+										<li key={key} className="!mb-3">
 											<CTA
-												className="inline-block py-px hover:underline"
+												className="footer-col inline-block opacity-50 hover:underline hover:opacity-100"
 												link={link}
 											/>
 										</li>

@@ -18,6 +18,7 @@
 	box-sizing: content-box;
 	border-radius: 3rem;
 	z-index: 2;
+	pointer-events: none;
 }
 
 .spotlight-outline::after {
@@ -73,7 +74,8 @@
 	transform: scale(0);
 	will-change: transform;
 	border-radius: 2rem;
-	opacity: 0.65;
+	opacity: 0.95;
+	filter: brightness(0.55);
 }
 
 .spotlight-bg-img img {
@@ -142,7 +144,7 @@
 	opacity: 0.35;
 	transition: opacity 0.3s ease;
 	font-size: 4rem;
-	font-weight: 500;
+	font-weight: bold;
 	line-height: 1;
 }
 
@@ -154,7 +156,6 @@
 	min-width: 300px;
 	height: 100%;
 	z-index: 1;
-	pointer-events: none;
 }
 
 .spotlight-img {
@@ -175,7 +176,7 @@
 .spotlight-header {
 	position: absolute;
 	top: 50%;
-	left: 10%;
+	left: 5%;
 	transform: translateY(-50%);
 	color: var(--base-100);
 	transition: opacity 0.3s ease;
@@ -198,7 +199,7 @@
 	}
 
 	.spotlight-titles h1 {
-		font-size: 22px;
+		font-size: 25px;
 	}
 
 	.spotlight-images {

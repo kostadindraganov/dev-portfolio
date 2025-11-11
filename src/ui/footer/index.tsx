@@ -69,15 +69,7 @@ export default async function Footer() {
 				<div className="footer-row">
 					<div className="footer-col">
 						<p>Quick Jumps</p>
-						<p>
-							<a href="/work">Portfolio</a>
-						</p>
-						<p>
-							<a href="/about">About</a>
-						</p>
-						<p>
-							<a href="/contact">Contact</a>
-						</p>
+						<Navigation />
 					</div>
 					<div className="footer-col">
 						<p>Side Streets</p>

@@ -43,9 +43,9 @@ const AboutPage = () => {
 				</header>
 
 				{/* Editor Body */}
-				<main className="font-mono text-sm md:text-base">
+				<div className="p-4 font-mono text-sm md:text-base">
 					{mounted && <Resume onTypingComplete={handleTypingComplete} />}
-				</main>
+				</div>
 			</div>
 
 			{isTypingComplete && (

@@ -17,7 +17,6 @@
 	}
 }
 .profile-image-animation {
-	animation: slideInFadeIn 0.8s ease-out forwards;
 	width: 18rem;
 }
 
