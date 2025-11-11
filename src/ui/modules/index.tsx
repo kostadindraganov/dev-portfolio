@@ -62,10 +62,12 @@ export default function Modules({
 	modules,
 	page,
 	post,
+	headerMenu,
 }: {
 	modules?: Sanity.Module[]
 	page?: Sanity.Page
 	post?: Sanity.BlogPost | Sanity.PortfolioItem
+	headerMenu?: Sanity.Navigation
 }) {
 	const getAdditionalProps = (module: Sanity.Module) => {
 		switch (module._type) {
@@ -75,6 +77,8 @@ export default function Modules({
 				return { post }
 			case 'breadcrumbs':
 				return { currentPage: post || page }
+			case 'home.portfolio':
+				return { headerMenu }
 			default:
 				return {}
 		}

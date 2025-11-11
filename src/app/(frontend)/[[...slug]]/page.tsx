@@ -11,11 +11,13 @@ import {
 } from '@/sanity/lib/queries'
 import { languages } from '@/lib/i18n'
 import errors from '@/lib/errors'
+import { getSite } from '@/sanity/lib/queries'
 
 export default async function Page({ params }: Props) {
 	const page = await getPage(await params)
 	if (!page) notFound()
-	return <Modules modules={page.modules} page={page} />
+	const { headerMenu } = await getSite()
+	return <Modules modules={page.modules} page={page} headerMenu={headerMenu} />
 }
 
 export async function generateMetadata({ params }: Props) {

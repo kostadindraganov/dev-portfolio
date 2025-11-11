@@ -22,7 +22,11 @@ let isInitialLoad = true
 gsap.registerPlugin(ScrollTrigger, CustomEase)
 CustomEase.create('hop', '0.9, 0, 0.1, 1')
 
-export default function Home() {
+export default function Home({
+	headerMenu,
+}: {
+	headerMenu: Sanity.Navigation
+}) {
 	const tagsRef = useRef<HTMLDivElement>(null)
 	const [showPreloader, setShowPreloader] = useState(isInitialLoad)
 	const [loaderAnimating, setLoaderAnimating] = useState(false)
@@ -241,7 +245,7 @@ export default function Home() {
 					</div>
 				</div>
 			)}
-			<Nav />
+			<Nav headerMenu={headerMenu} />
 			<section className="hero">
 				<div className="hero-bg">
 					{/* <img src="/home/hero.jpg" alt="" /> */}

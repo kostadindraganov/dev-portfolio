@@ -17,10 +17,11 @@ import { useLenis } from 'lenis/react'
 
 import MenuBtn from '../MenuBtn/MenuBtn'
 import { useViewTransition } from '@/hooks/useViewTransition'
+import resolveUrl from '@/lib/resolveUrl'
 
 gsap.registerPlugin(SplitText)
 
-const Nav = () => {
+const Nav = ({ headerMenu }) => {
 	const [isAnimating, setIsAnimating] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	const [isNavigating, setIsNavigating] = useState(false)
@@ -100,7 +101,7 @@ const Nav = () => {
 
 			isInitializedRef.current = true
 		}
-	}, [])
+	}, [headerMenu])
 
 	const animateMenu = useCallback((open) => {
 		if (!menuRef.current) {
@@ -208,19 +209,46 @@ const Nav = () => {
 			setIsNavigating(true)
 			navigateWithTransition(href)
 		},
-		[isNavigating, router, isOpen, setIsOpen],
+		[isNavigating, isOpen, navigateWithTransition],
 	)
 
-	const splitTextIntoSpans = (text) => {
-		return text
-			.split('')
-			.map((char, index) =>
-				char === ' ' ? (
-					<span key={index}>&nbsp;&nbsp;</span>
-				) : (
-					<span key={index}>{char}</span>
-				),
+	const renderMenuItems = () => {
+		if (!headerMenu?.items) return null
+
+		const items = []
+
+		headerMenu.items.forEach((item) => {
+			if (item._type === 'link') {
+				items.push(item)
+			} else if (item._type === 'link.list') {
+				if (item.link) {
+					items.push(item.link)
+				}
+				if (item.links) {
+					items.push(...item.links)
+				}
+			}
+		})
+
+		return items.map((item, index) => {
+			const href =
+				item.type === 'internal' && item.internal
+					? resolveUrl(item.internal, {
+							base: false,
+							params: item.params,
+						})
+					: item.type === 'external' && item.external
+						? item.external
+						: '#'
+
+			return (
+				<div className="link" key={index}>
+					<a href={href} onClick={(e) => handleLinkClick(e, href)}>
+						<h2>{item.label}</h2>
+					</a>
+				</div>
 			)
+		})
 	}
 
 	return (
@@ -229,50 +257,7 @@ const Nav = () => {
 			<div className="menu" ref={menuRef}>
 				<div className="menu-wrapper">
 					<div className="col col-1">
-						<div className="links">
-							<div className="link">
-								<a href="/" onClick={(e) => handleLinkClick(e, '/')}>
-									<h2>Index</h2>
-								</a>
-							</div>
-							<div className="link">
-								<a
-									href="/studio"
-									onClick={(e) => handleLinkClick(e, '/studio')}
-								>
-									<h2>Studio</h2>
-								</a>
-							</div>
-							<div className="link">
-								<a
-									href="/spaces"
-									onClick={(e) => handleLinkClick(e, '/spaces')}
-								>
-									<h2>Our Spaces</h2>
-								</a>
-							</div>
-							<div className="link">
-								<a
-									href="/sample-space"
-									onClick={(e) => handleLinkClick(e, '/sample-space')}
-								>
-									<h2>One Installation</h2>
-								</a>
-							</div>
-							<div className="link">
-								<a
-									href="/blueprints"
-									onClick={(e) => handleLinkClick(e, '/blueprints')}
-								>
-									<h2>Blueprints</h2>
-								</a>
-							</div>
-							<div className="link">
-								<a href="/blog" onClick={(e) => handleLinkClick(e, '/blog')}>
-									<h2>Blog</h2>
-								</a>
-							</div>
-						</div>
+						<div className="links">{renderMenuItems()}</div>
 					</div>
 					<div className="col col-2">
 						<div className="socials">
