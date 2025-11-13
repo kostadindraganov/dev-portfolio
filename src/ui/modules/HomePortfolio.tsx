@@ -17,6 +17,7 @@ import CTAWindow from '@/ui/CTAWindow/CTAWindow'
 import Copy from '@/ui/Copy/Copy'
 import Spotlight from '@/ui/Spotlight/Spotlight'
 import ScannHero from '@/ui/ScannHero'
+import { TextScroll } from '@/ui/TextScroll'
 
 let isInitialLoad = true
 gsap.registerPlugin(ScrollTrigger, CustomEase)
@@ -343,11 +344,14 @@ export default function Home({
 				<FeaturedProjects />
 			</section>
 			<section className="client-reviews-container">
-				<div className="container">
-					<div className="client-reviews-header-callout">
-						<p>Voices from our spaces</p>
+				<div className="container items-center">
+					<div className="flex h-screen items-center">
+						<TextScroll
+							default_velocity={3}
+							text="This Is KOKO dev this is ok - "
+							className="font-mono text-3xl font-semibold"
+						></TextScroll>
 					</div>
-					<ClientReviews />
 				</div>
 			</section>
 			<section className="gallery-callout">
