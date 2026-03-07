@@ -43,3 +43,4 @@ public/admin/static
 
 # Auto Claude data directory
 .auto-claude/
+.agent/*
