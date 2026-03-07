@@ -1,5 +1,6 @@
 "use client";
 import "./CTAWindow.css";
+import PropTypes from "prop-types";
 
 import Copy from "../Copy/Copy";
 
@@ -31,6 +32,13 @@ const CTAWindow = ({ img, header, callout, description }) => {
       </div>
     </section>
   );
+};
+
+CTAWindow.propTypes = {
+  img: PropTypes.string,
+  header: PropTypes.string,
+  callout: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default CTAWindow;

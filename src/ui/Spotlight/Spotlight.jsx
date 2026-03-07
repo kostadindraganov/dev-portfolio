@@ -18,9 +18,8 @@ const Spotlight = () => {
 	const introTextElementsRef = useRef([])
 	const imageElementsRef = useRef([])
 	const titleElementsRefs = useRef([])
-	const currentActiveIndexRef = useRef(0)
 	const scrollTriggerRef = useRef(null)
-	const [bgImage, setBgImage] = useState('/spotlight/spotlight-img-1.jsx')
+	const [bgImage, setBgImage] = useState('')
 
 	// NOTE: These values are interconnected - when speed changes, it affects when images finish their movement, which also affects the gap between images. When you change the number of items in spotlightItems array, you'll need to adjust these config settings together. Test different combinations until you find the right balance that looks good.
 	const config = {
@@ -243,7 +242,7 @@ const Spotlight = () => {
 				scrollTriggerRef.current.kill()
 			}
 		}
-	}, [spotlightItems])
+	}, [spotlightItems, config.arcRadius, config.gap, config.speed])
 
 	return (
 		<section className="spotlight" ref={spotlightRef}>
@@ -263,7 +262,7 @@ const Spotlight = () => {
 					</div>
 				</div>
 				<div className="spotlight-bg-img">
-					<img src={bgImage} alt="" className="local-pixel-canvas" />
+					{bgImage && <img src={bgImage} alt="" className="local-pixel-canvas" />}
 				</div>
 			</div>
 			<div

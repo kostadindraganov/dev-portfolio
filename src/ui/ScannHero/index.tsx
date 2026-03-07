@@ -3,7 +3,7 @@
 import { WebGPUCanvas } from './canvas'
 import { useAspect, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useContext, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -26,7 +26,7 @@ import * as THREE from 'three/webgpu'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(ScrollTrigger)
-import { GlobalContext, ContextProvider } from './context'
+import { ContextProvider } from './context'
 import { PostProcessing } from './post-processing'
 import TEXTUREMAP from '../../../public/hero/raw-1.webp'
 import DEPTHMAP from '../../../public/hero/depth-1.png'
@@ -154,7 +154,7 @@ const Scene = () => {
 	})
 
 	return (
-		<mesh scale={[w, h, 2]} material={material}>
+		<mesh scale={[w, h, 2]} material={material}> {/* eslint-disable-line react/no-unknown-property */}
 			<planeGeometry />
 		</mesh>
 	)

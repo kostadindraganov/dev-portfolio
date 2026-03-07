@@ -9,7 +9,6 @@ let isInitialLoad = true
 
 export default function Preloader() {
 	const [showPreloader, setShowPreloader] = useState(true)
-	const [loaderAnimating, setLoaderAnimating] = useState(false)
 	const pathname = usePathname()
 
 	useEffect(() => {
@@ -26,7 +25,6 @@ export default function Preloader() {
 
 	useGSAP(() => {
 		if (showPreloader) {
-			setLoaderAnimating(true)
 
 			const tl = gsap.timeline({
 				delay: 0.3,
@@ -114,7 +112,6 @@ export default function Preloader() {
 					delay: 0.75,
 					onComplete: () => {
 						gsap.set('.loader', { pointerEvents: 'none' })
-						setLoaderAnimating(false)
 						setShowPreloader(false)
 					},
 				},

@@ -71,9 +71,6 @@ export default function PixelImageEffect() {
                 img.src
       );
 
-      console.log("PIXEL EFFECT - Found images to track:", imageElements.length);
-      console.log("PIXEL EFFECT - Image targets:", imageElements);
-
       // 3. Create Media Instances
       mediasRef.current = imageElements.map((img) => {
         const media = new Media({

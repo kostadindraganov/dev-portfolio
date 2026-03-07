@@ -9,6 +9,7 @@ import { useGSAP } from "@gsap/react";
 import { useViewTransition } from "@/hooks/useViewTransition";
 
 import { IoMdArrowForward } from "react-icons/io";
+import PropTypes from "prop-types";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
@@ -36,7 +37,7 @@ const AnimatedButton = ({
       await Promise.all(fontCheckPromises);
       await new Promise((resolve) => setTimeout(resolve, 100));
       return true;
-    } catch (error) {
+    } catch {
       await new Promise((resolve) => setTimeout(resolve, 200));
       return true;
     }
@@ -169,6 +170,14 @@ const AnimatedButton = ({
       {buttonContent}
     </button>
   );
+};
+
+AnimatedButton.propTypes = {
+  label: PropTypes.node,
+  route: PropTypes.string,
+  animate: PropTypes.bool,
+  animateOnScroll: PropTypes.bool,
+  delay: PropTypes.number,
 };
 
 export default AnimatedButton;

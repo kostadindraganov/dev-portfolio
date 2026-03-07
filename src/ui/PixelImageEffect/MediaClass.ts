@@ -141,7 +141,6 @@ export default class Media {
       
       // Update element opacity after textures loads successfully
       gsap.set(this.element, { opacity: 0 });
-      console.log("PIXEL EFFECT - Texture loaded for:", src);
     }, (err) => {
       console.error("PIXEL EFFECT - Texture load error for:", src, err);
     });

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface Particle {
 	element: HTMLImageElement
@@ -41,7 +41,7 @@ export default function ExplosionAnimation() {
 		})
 	}, [])
 
-	const createParticles = () => {
+	const createParticles = useCallback(() => {
 		if (!containerRef.current) return []
 
 		containerRef.current.innerHTML = ''
@@ -67,7 +67,7 @@ export default function ExplosionAnimation() {
 		})
 
 		return particles
-	}
+	}, [])
 
 	const updateParticle = (particle: Particle) => {
 		particle.vy += config.gravity
@@ -82,7 +82,7 @@ export default function ExplosionAnimation() {
 		particle.element.style.transform = `translate(${particle.x}px, ${particle.y}px) rotate(${particle.rotation}deg)`
 	}
 
-	const explode = () => {
+	const explode = useCallback(() => {
 		if (hasExploded || !containerRef.current) return
 
 		setHasExploded(true)
@@ -105,25 +105,25 @@ export default function ExplosionAnimation() {
 		}
 
 		animate()
-	}
-
-	const checkFooterPosition = () => {
-		const footer = document.querySelector('footer')
-		if (!footer || !containerRef.current) return
-
-		const footerRect = footer.getBoundingClientRect()
-		const viewportHeight = window.innerHeight
-
-		if (footerRect.top > viewportHeight + 100) {
-			setHasExploded(false)
-		}
-
-		if (!hasExploded && footerRect.top <= viewportHeight + 250) {
-			explode()
-		}
-	}
+	}, [hasExploded, createParticles])
 
 	useEffect(() => {
+		const checkFooterPosition = () => {
+			const footer = document.querySelector('footer')
+			if (!footer || !containerRef.current) return
+
+			const footerRect = footer.getBoundingClientRect()
+			const viewportHeight = window.innerHeight
+
+			if (footerRect.top > viewportHeight + 100) {
+				setHasExploded(false)
+			}
+
+			if (!hasExploded && footerRect.top <= viewportHeight + 250) {
+				explode()
+			}
+		}
+
 		let checkTimeout: NodeJS.Timeout
 
 		const handleScroll = () => {
@@ -149,7 +149,7 @@ export default function ExplosionAnimation() {
 				cancelAnimationFrame(animationIdRef.current)
 			}
 		}
-	}, [hasExploded])
+	}, [hasExploded, explode])
 
 	return <div ref={containerRef} className="explosion-container" />
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { ReactLenis } from "lenis/react";
 import { ViewTransitions } from "next-view-transitions";
+import PropTypes from "prop-types";
 
 export default function ClientLayout({ children }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -57,5 +58,9 @@ export default function ClientLayout({ children }) {
         {children}
       </ReactLenis>
     </ViewTransitions>
-  );
+	);
+}
+
+ClientLayout.propTypes = {
+	children: PropTypes.node.isRequired,
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./MenuBtn.css";
 
 const MenuBtn = ({ isOpen, toggleMenu }) => {
@@ -18,6 +19,11 @@ const MenuBtn = ({ isOpen, toggleMenu }) => {
       </div>
     </div>
   );
+};
+
+MenuBtn.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 export default MenuBtn;

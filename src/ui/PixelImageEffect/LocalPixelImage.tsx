@@ -50,7 +50,7 @@ export default function LocalPixelImage({
         uContainerRes: { value: new THREE.Vector2(1, 1) },
         uProgress: { value: 0 },
         uGridSize: { value: 15 },
-        uColor: { value: new THREE.Color('#8c8a8aff') },
+        uColor: { value: new THREE.Color('#ffffff') },
       },
       transparent: true,
     });
@@ -66,7 +66,9 @@ export default function LocalPixelImage({
       material.uniforms.uContainerRes.value.set(width, height);
     };
 
-    let ctx = gsap.context(() => {});
+    let ctx = gsap.context(() => {
+      // Empty context forGSAP animations
+    });
 
     const texLoader = new THREE.TextureLoader();
     texLoader.load(src, (texture) => {

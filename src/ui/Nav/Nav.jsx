@@ -8,7 +8,7 @@ import {
 	useRef,
 	useLayoutEffect,
 } from 'react'
-import { useRouter } from 'next/navigation'
+import PropTypes from 'prop-types'
 
 import gsap from 'gsap'
 import CustomEase from 'gsap/CustomEase'
@@ -28,7 +28,6 @@ const Nav = ({ headerMenu }) => {
 	const menuRef = useRef(null)
 	const isInitializedRef = useRef(false)
 	const splitTextRefs = useRef([])
-	const router = useRouter()
 	const lenis = useLenis()
 
 	const { navigateWithTransition } = useViewTransition()
@@ -273,6 +272,12 @@ const Nav = ({ headerMenu }) => {
 			</div>
 		</div>
 	)
+}
+
+Nav.propTypes = {
+	headerMenu: PropTypes.shape({
+		items: PropTypes.arrayOf(PropTypes.object),
+	}),
 }
 
 export default Nav

@@ -13,12 +13,9 @@ import Nav from '@/ui/Nav/Nav'
 import AnimatedButton from '@/ui/AnimatedButton/AnimatedButton'
 import FeaturedProjects from '@/ui/FeaturedProjects/FeaturedProjects'
 import LocalPixelImage from '@/ui/PixelImageEffect/LocalPixelImage'
-import ClientReviews from '@/ui/ClientReviews/ClientReviews'
-import CTAWindow from '@/ui/CTAWindow/CTAWindow'
 import Copy from '@/ui/Copy/Copy'
 import Spotlight from '@/ui/Spotlight/Spotlight'
 import ScannHero from '@/ui/ScannHero'
-import { TextScroll } from '@/ui/TextScroll'
 
 let isInitialLoad = true
 gsap.registerPlugin(ScrollTrigger, CustomEase)
@@ -146,7 +143,7 @@ export default function Home({
 					stagger: 0.1,
 					delay: 0.75,
 					onStart: () => {
-						gsap.to('.hero-img', { scale: 1, duration: 2, ease: 'hop' })
+						gsap.to('.scan-hero-container', { scale: 1, duration: 2, ease: 'hop' })
 					},
 					onComplete: () => {
 						gsap.set('.loader', { pointerEvents: 'none' })

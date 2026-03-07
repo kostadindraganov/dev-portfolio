@@ -1,6 +1,5 @@
 import { getSite } from '@/sanity/lib/queries'
 import CTA from '@/ui/CTA'
-import { stegaClean } from 'next-sanity'
 
 export default async function Menu() {
 	const { footerMenu } = await getSite()

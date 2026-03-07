@@ -1,7 +1,6 @@
 'use client'
 
 import moduleProps from '@/lib/moduleProps'
-import Pretitle from '@/ui/Pretitle'
 import { PortableText } from 'next-sanity'
 import Code from '../RichtextModule/Code'
 import CustomHTML from '../CustomHTML'
@@ -27,7 +26,6 @@ export default function ScrollHero({
 
 	const pathname = usePathname()
 	const [isInitialized, setIsInitialized] = useState(false)
-	const asset = assets?.[0]
 	const containerRef = useRef<HTMLDivElement | null>(null)
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
 	const navRef = useRef<HTMLElement | null>(null)

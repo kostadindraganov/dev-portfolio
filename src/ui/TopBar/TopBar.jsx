@@ -16,8 +16,8 @@ const TopBar = () => {
 	const topBarRef = useRef(null)
 	const { navigateWithTransition } = useViewTransition()
 	const pathname = usePathname()
-	let lastScrollY = 0
-	let isScrolling = false
+	let lastScrollY = useRef(0)
+	let isScrolling = useRef(false)
 
 	useEffect(() => {
 		const topBar = topBarRef.current
@@ -28,11 +28,11 @@ const TopBar = () => {
 		gsap.set(topBar, { y: 0 })
 
 		const handleScroll = () => {
-			if (isScrolling) return
+			if (isScrolling.current) return
 
-			isScrolling = true
+			isScrolling.current = true
 			const currentScrollY = window.scrollY
-			const direction = currentScrollY > lastScrollY ? 1 : -1
+			const direction = currentScrollY > lastScrollY.current ? 1 : -1
 
 			if (direction === 1 && currentScrollY > 50) {
 				gsap.to(topBar, {
@@ -48,10 +48,10 @@ const TopBar = () => {
 				})
 			}
 
-			lastScrollY = currentScrollY
+			lastScrollY.current = currentScrollY
 
 			setTimeout(() => {
-				isScrolling = false
+				isScrolling.current = false
 			}, 100)
 		}
 
