@@ -1,0 +1,21 @@
+{
+  "version": 3,
+  "createdAt": "2026-03-07T17:44:07.390Z",
+  "workspaces": [
+    {
+      "name": "default",
+      "title": "SanityPress",
+      "basePath": "/admin",
+      "projectId": "n9n1f0ig",
+      "dataset": "production",
+      "icon": "<img style=\"width:100%;aspect-ratio:1\" src=\"/favicon.ico\" alt=\"SanityPress\">",
+      "mediaLibrary": {
+        "enabled": false,
+        "__internal": {}
+      },
+      "schema": "996051bd.create-schema.json",
+      "tools": "60f68aa1.create-tools.json"
+    }
+  ],
+  "studioVersion": "5.13.0"
+}

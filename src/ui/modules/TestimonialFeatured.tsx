@@ -31,6 +31,7 @@ export default function TestimonialFeatured({
 										className="text-ink/50"
 										href={testimonial.source}
 										target="_blank"
+										rel="noopener noreferrer"
 										title="Source"
 									>
 										<VscSurroundWith />

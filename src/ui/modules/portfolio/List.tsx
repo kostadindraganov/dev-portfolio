@@ -9,7 +9,7 @@ export default function PortfolioList({
 }: {
 	items: Sanity.PortfolioItem[]
 } & React.ComponentProps<'ul'>) {
-	const filtered = filterPortfolioItems(items)
+	const filtered = useFilterPortfolioItems(items)
 
 	if (!filtered.length) {
 		return <div>No items found...</div>
@@ -27,7 +27,7 @@ export default function PortfolioList({
 	)
 }
 
-export function filterPortfolioItems(items: Sanity.PortfolioItem[]) {
+export function useFilterPortfolioItems(items: Sanity.PortfolioItem[]) {
 	const { category, author } = usePortfolioFilters()
 
 	return items.filter((item) => {

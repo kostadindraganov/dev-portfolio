@@ -1,7 +1,7 @@
 'use client'
 
 import { usePagination } from '@/lib/usePagination'
-import PortfolioList, { filterPortfolioItems } from './List'
+import PortfolioList, { useFilterPortfolioItems } from './List'
 
 export default function Paginated({
 	items,
@@ -11,7 +11,7 @@ export default function Paginated({
 	itemsPerPage?: number
 }) {
 	const { paginatedItems, Pagination } = usePagination({
-		items: filterPortfolioItems(items),
+		items: useFilterPortfolioItems(items),
 		itemsPerPage,
 	})
 

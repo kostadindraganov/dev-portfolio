@@ -11,19 +11,20 @@ export default function WithScript({
 	className,
 	...props
 }: Sanity.CustomHTML['html'] & Sanity.Module & ComponentProps<'section'>) {
-	if (!code) return null
-
 	const ref = useRef<HTMLElement>(null)
 	const [firstRender, setFirstRender] = useState(true)
 
 	useEffect(() => {
+		if (!code) return
 		if (firstRender) {
 			setFirstRender(false)
 		} else {
 			const parsed = document.createRange().createContextualFragment(code)
 			ref.current?.appendChild(parsed)
 		}
-	}, [ref.current, code])
+	}, [firstRender, code])
+
+	if (!code) return null
 
 	return <section ref={ref} className={className} {...moduleProps(props)} />
 }

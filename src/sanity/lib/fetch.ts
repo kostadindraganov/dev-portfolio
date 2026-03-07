@@ -4,8 +4,8 @@ import { client } from '@/sanity/lib/client'
 import { token } from '@/sanity/lib/token'
 import { dev } from '@/lib/env'
 import { draftMode } from 'next/headers'
-import { defineLive } from 'next-sanity/live'
 import { type QueryOptions, type QueryParams } from 'next-sanity'
+import { sanityFetch } from '@/sanity/lib/live'
 
 export async function fetchSanity<T = any>({
 	query,
@@ -42,12 +42,6 @@ export async function fetchSanity<T = any>({
 				},
 	)
 }
-
-export const { sanityFetch, SanityLive } = defineLive({
-	client,
-	serverToken: token,
-	browserToken: token,
-})
 
 export async function fetchSanityLive<T = any>(
 	args: Parameters<typeof sanityFetch>[0],

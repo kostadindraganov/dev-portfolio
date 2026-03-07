@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
 							marginRight: '0.5rem',
 						}}
 						src={`https://ic0n.dev/vsc/VscHeartFilled?hex=${color.slice(1)}`}
+						alt=""
 					/>
 
 					<span

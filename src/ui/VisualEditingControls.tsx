@@ -1,5 +1,6 @@
 import { draftMode } from 'next/headers'
-import { fetchSanityLive, SanityLive } from '@/sanity/lib/fetch'
+import { fetchSanityLive } from '@/sanity/lib/fetch'
+import { SanityLive } from '@/sanity/lib/live'
 import { groq } from 'next-sanity'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import DraftModeControls from './DraftModeControls'

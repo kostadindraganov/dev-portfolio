@@ -40,3 +40,6 @@ next-env.d.ts
 public/google*.html
 
 public/admin/static
+
+# Auto Claude data directory
+.auto-claude/

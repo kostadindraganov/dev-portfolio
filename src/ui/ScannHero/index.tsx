@@ -65,7 +65,7 @@ const Scene = () => {
 
 		const depth = tDepthMap
 
-		const flow = oneMinus(smoothstep(0, 0.01, abs(depth.sub(uProgress))))
+		const flow = oneMinus(smoothstep(0, 0.01, abs(depth.r.sub(uProgress))))
 		// const mask = dot.mul(flow).mul(vec3(10, 0, 0))
 		const mask = dot.mul(flow).mul(vec3(1, 3, 8))
 

@@ -14,9 +14,6 @@ const client = createClient({
 })
 
 export default {
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
 	images: {
 		dangerouslyAllowSVG: true,
 		remotePatterns: [

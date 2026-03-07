@@ -1,7 +1,7 @@
 'use client'
 
 import { usePagination } from '@/lib/usePagination'
-import List, { filterPosts } from '../BlogList/List'
+import List, { useFilterPosts } from '../BlogList/List'
 
 export default function Paginated({
 	posts,
@@ -11,7 +11,7 @@ export default function Paginated({
 	itemsPerPage?: number
 }) {
 	const { paginatedItems, Pagination } = usePagination({
-		items: filterPosts(posts),
+		items: useFilterPosts(posts),
 		itemsPerPage,
 	})
 
@@ -31,7 +31,7 @@ export default function Paginated({
 			/>
 
 			<Pagination
-				className="frosted-glass sticky bottom-0 flex items-center justify-center gap-4 bg-canvas p-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] tabular-nums"
+				className="frosted-glass bg-canvas sticky bottom-0 flex items-center justify-center gap-4 p-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] tabular-nums"
 				buttonClassName="hover:underline disabled:opacity-20"
 				onClick={scrollToList}
 			/>

@@ -32,6 +32,7 @@ export default function PreviewOG({ title }: { title?: string }) {
 							height: 'auto',
 						}}
 						src={url}
+						alt="Open Graph preview"
 						width={1200}
 						height={630}
 					/>

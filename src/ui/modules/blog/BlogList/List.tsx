@@ -9,7 +9,7 @@ export default function List({
 }: {
 	posts: Sanity.BlogPost[]
 } & React.ComponentProps<'ul'>) {
-	const filtered = filterPosts(posts)
+	const filtered = useFilterPosts(posts)
 
 	if (!filtered.length) {
 		return <div>No posts found...</div>
@@ -26,7 +26,7 @@ export default function List({
 	)
 }
 
-export function filterPosts(posts: Sanity.BlogPost[]) {
+export function useFilterPosts(posts: Sanity.BlogPost[]) {
 	const { category, author } = useBlogFilters()
 
 	return posts.filter((post) => {

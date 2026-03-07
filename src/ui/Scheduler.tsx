@@ -11,8 +11,6 @@ export default function Scheduler({
 	end: string
 	children: React.ReactNode
 }>) {
-	if (!start && !end) return children
-
 	function checkActive() {
 		const now = new Date()
 		return (!start || new Date(start) < now) && (!end || new Date(end) > now)
@@ -21,10 +19,12 @@ export default function Scheduler({
 	const [isActive, setIsActive] = useState(checkActive())
 
 	useEffect(() => {
+		if (!start && !end) return
 		const interval = setInterval(() => setIsActive(checkActive()), 1000) // check every second
 		return () => clearInterval(interval)
-	}, [])
+	}, [start, end])
 
+	if (!start && !end) return children
 	if (!isActive) return null
 
 	return children

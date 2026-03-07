@@ -100,7 +100,7 @@ export const MODULES_QUERY = groq`
 			_type == 'img' => { ${ASSET_IMG_QUERY} }
 		}
 	},
-	_type == 'scroll-hero' => {
+	_type == 'scroll.hero' => {
 		content[]{
 			...,
 			${REPUTATION_QUERY}

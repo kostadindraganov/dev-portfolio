@@ -80,7 +80,11 @@ export default async function Footer() {
 					<div className="footer-col">
 						<p>Social Signals</p>
 						<p>
-							<a href="https://www.youtube.com/@codegrid" target="_blank">
+							<a
+								href="https://www.youtube.com/@codegrid"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
 								YouTube
 							</a>
 						</p>
@@ -88,12 +92,17 @@ export default async function Footer() {
 							<a
 								href="https://codegrid.gumroad.com/l/codegridpro"
 								target="_blank"
+								rel="noopener noreferrer"
 							>
 								Membership
 							</a>
 						</p>
 						<p>
-							<a href="https://www.instagram.com/codegridweb/" target="_blank">
+							<a
+								href="https://www.instagram.com/codegridweb/"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
 								Instagram
 							</a>
 						</p>

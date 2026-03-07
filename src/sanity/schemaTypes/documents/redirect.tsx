@@ -39,6 +39,7 @@ export default defineType({
 						<a
 							href="https://nextjs.org/docs/app/api-reference/next-config-js/redirects"
 							target="_blank"
+							rel="noreferrer"
 						>
 							Next.js redirects documentation
 						</a>
