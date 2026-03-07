@@ -57,7 +57,7 @@
 
 .btn .line {
   position: relative;
-  transform: translateY(100%);
+  /* transform: translateY(100%); */
   will-change: transform;
   padding-bottom: 0.2em;
   margin-bottom: -0.2em;

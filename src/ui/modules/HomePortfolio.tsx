@@ -343,7 +343,7 @@ export default function Home({
 				</div>
 				<FeaturedProjects />
 			</section>
-			<section className="client-reviews-container">
+			{/* <section className="client-reviews-container">
 				<div className="container items-center">
 					<div className="flex h-screen items-center">
 						<TextScroll
@@ -353,7 +353,7 @@ export default function Home({
 						></TextScroll>
 					</div>
 				</div>
-			</section>
+			</section> */}
 			<section className="gallery-callout">
 				<div className="container">
 					<div className="gallery-callout-col">
