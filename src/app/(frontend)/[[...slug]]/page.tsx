@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
+import PixelEffectOverlay from '@/ui/PixelImageEffect/PixelEffectOverlay'
 import Modules from '@/ui/modules'
+
 import processMetadata from '@/lib/processMetadata'
 import { client } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
@@ -15,9 +17,17 @@ import { getSite } from '@/sanity/lib/queries'
 
 export default async function Page({ params }: Props) {
 	const page = await getPage(await params)
+	const slug = (await params).slug?.join('/') || 'index';
+
 	if (!page) notFound()
 	const { headerMenu } = await getSite()
-	return <Modules modules={page.modules} page={page} headerMenu={headerMenu} />
+
+	return (
+		<>
+			<Modules modules={page.modules} page={page} headerMenu={headerMenu} />
+			{slug === 'index' && <PixelEffectOverlay />}
+		</>
+	)
 }
 
 export async function generateMetadata({ params }: Props) {

@@ -1,6 +1,7 @@
 "use client";
 import "./FeaturedProjects.css";
 import featuredProjectsContent from "./featured-projects-content";
+import LocalPixelImage from "@/ui/PixelImageEffect/LocalPixelImage";
 
 import { useEffect } from "react";
 
@@ -80,7 +81,7 @@ const FeaturedProjects = () => {
                 </div>
               </div>
               <div className="featured-project-card-img">
-                <img src={project.image} alt={project.title} />
+                <LocalPixelImage src={project.image} alt={project.title} />
               </div>
             </div>
           </div>

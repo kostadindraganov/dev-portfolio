@@ -17,9 +17,10 @@ const Spotlight = () => {
 	const titlesContainerElementRef = useRef(null)
 	const introTextElementsRef = useRef([])
 	const imageElementsRef = useRef([])
-	const titleElementsRef = useRef([])
+	const titleElementsRefs = useRef([])
 	const currentActiveIndexRef = useRef(0)
 	const scrollTriggerRef = useRef(null)
+	const [bgImage, setBgImage] = useState('/spotlight/spotlight-img-1.jsx')
 
 	// NOTE: These values are interconnected - when speed changes, it affects when images finish their movement, which also affects the gap between images. When you change the number of items in spotlightItems array, you'll need to adjust these config settings together. Test different combinations until you find the right balance that looks good.
 	const config = {
@@ -41,7 +42,10 @@ const Spotlight = () => {
             'slug': metadata.slug.current
           }`,
 				)
-				setSpotlightItems(items)
+				if (items.length > 0) {
+					setSpotlightItems(items)
+					setBgImage(items[0].img)
+				}
 			} catch (error) {
 				console.error('Error fetching spotlight items:', error)
 			}
@@ -57,77 +61,12 @@ const Spotlight = () => {
 			return
 		}
 
-		const initializeSpotlight = () => {
-			const titlesContainer = titlesContainerRef.current
-			const imagesContainer = imagesContainerRef.current
-			const spotlightHeader = spotlightHeaderRef.current
-			const titlesContainerElement = titlesContainerElementRef.current
-			const introTextElements = introTextElementsRef.current
-			const imageElements = imageElementsRef.current
-
-			if (
-				!titlesContainer ||
-				!imagesContainer ||
-				!spotlightHeader ||
-				!titlesContainerElement
-			) {
-				return false
-			}
-
-			titlesContainer.innerHTML = ''
-			imagesContainer.innerHTML = ''
-			imageElements.length = 0
-
-			spotlightItems.forEach((item, index) => {
-				const titleLink = document.createElement('a')
-				titleLink.href = `/portfolio/${item.slug}`
-				titleLink.style.textDecoration = 'none'
-				titleLink.style.color = 'inherit'
-				const titleElement = document.createElement('h1')
-				titleElement.textContent = item.name
-				if (index === 0) titleElement.style.opacity = '1'
-				titleLink.appendChild(titleElement)
-				titlesContainer.appendChild(titleLink)
-
-				const imgWrapper = document.createElement('div')
-				imgWrapper.className = 'spotlight-img'
-				const imgLink = document.createElement('a')
-				imgLink.href = `/portfolio/${item.slug}`
-				const imgElement = document.createElement('img')
-				imgElement.src = item.img
-				imgElement.alt = ''
-				imgLink.appendChild(imgElement)
-				imgWrapper.appendChild(imgLink)
-				imagesContainer.appendChild(imgWrapper)
-				imageElements.push(imgWrapper)
-			})
-
-			const titleElements = titlesContainer.querySelectorAll('h1')
-			titleElementsRef.current = titleElements
-
-			if (titleElements.length === 0) {
-				return false
-			}
-
-			return true
-		}
-
-		let initialized = initializeSpotlight()
-
-		if (!initialized) {
-			const initInterval = setInterval(() => {
-				initialized = initializeSpotlight()
-				if (initialized) {
-					clearInterval(initInterval)
-				}
-			}, 10)
-
-			setTimeout(() => {
-				clearInterval(initInterval)
-			}, 2000)
-		}
-
-		if (!initialized) {
+		if (
+			!titlesContainerRef.current ||
+			!imagesContainerRef.current ||
+			!spotlightHeaderRef.current ||
+			!titlesContainerElementRef.current
+		) {
 			return
 		}
 
@@ -136,7 +75,7 @@ const Spotlight = () => {
 		const titlesContainerElement = titlesContainerElementRef.current
 		const introTextElements = introTextElementsRef.current
 		const imageElements = imageElementsRef.current
-		const titleElements = titleElementsRef.current
+		const titleElements = titleElementsRefs.current
 		let currentActiveIndex = 0
 
 		const containerWidth = window.innerWidth * 0.3
@@ -169,7 +108,9 @@ const Spotlight = () => {
 			return (overallProgress - startTime) / config.speed
 		}
 
-		imageElements.forEach((img) => gsap.set(img, { opacity: 0 }))
+		imageElements.forEach((img) => {
+			if (img) gsap.set(img, { opacity: 0 })
+		})
 
 		scrollTriggerRef.current = ScrollTrigger.create({
 			trigger: '.spotlight',
@@ -197,11 +138,13 @@ const Spotlight = () => {
 					gsap.set('.spotlight-bg-img', {
 						transform: `scale(${animationProgress})`,
 					})
-					gsap.set('.spotlight-bg-img img', {
+					gsap.set('.spotlight-bg-img .local-pixel-canvas', {
 						transform: `scale(${1.5 - animationProgress * 0.5})`,
 					})
 
-					imageElements.forEach((img) => gsap.set(img, { opacity: 0 }))
+					imageElements.forEach((img) => {
+						if (img) gsap.set(img, { opacity: 0 })
+					})
 					spotlightHeader.style.opacity = '0'
 					gsap.set(titlesContainerElement, {
 						'--before-opacity': '0',
@@ -209,12 +152,14 @@ const Spotlight = () => {
 					})
 				} else if (progress > 0.2 && progress <= 0.25) {
 					gsap.set('.spotlight-bg-img', { transform: 'scale(1)' })
-					gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' })
+					gsap.set('.spotlight-bg-img .local-pixel-canvas', { transform: 'scale(1)' })
 
 					gsap.set(introTextElements[0], { opacity: 0 })
 					gsap.set(introTextElements[1], { opacity: 0 })
 
-					imageElements.forEach((img) => gsap.set(img, { opacity: 0 }))
+					imageElements.forEach((img) => {
+						if (img) gsap.set(img, { opacity: 0 })
+					})
 					spotlightHeader.style.opacity = '1'
 					gsap.set(titlesContainerElement, {
 						'--before-opacity': '1',
@@ -222,7 +167,7 @@ const Spotlight = () => {
 					})
 				} else if (progress > 0.25 && progress <= 0.95) {
 					gsap.set('.spotlight-bg-img', { transform: 'scale(1)' })
-					gsap.set('.spotlight-bg-img img', { transform: 'scale(1)' })
+					gsap.set('.spotlight-bg-img .local-pixel-canvas', { transform: 'scale(1)' })
 
 					gsap.set(introTextElements[0], { opacity: 0 })
 					gsap.set(introTextElements[1], { opacity: 0 })
@@ -246,6 +191,7 @@ const Spotlight = () => {
 					})
 
 					imageElements.forEach((img, index) => {
+						if (!img) return
 						const imageProgress = getImgProgressState(index, switchProgress)
 
 						if (imageProgress < 0 || imageProgress > 1) {
@@ -265,6 +211,7 @@ const Spotlight = () => {
 					let closestDistance = Infinity
 
 					titleElements.forEach((title, index) => {
+						if (!title) return
 						const titleRect = title.getBoundingClientRect()
 						const titleCenter = titleRect.top + titleRect.height / 2
 						const distanceFromCenter = Math.abs(titleCenter - viewportMiddle)
@@ -276,10 +223,9 @@ const Spotlight = () => {
 					})
 
 					if (closestIndex !== currentActiveIndex) {
-						titleElements[currentActiveIndex].style.opacity = '0.35'
-						titleElements[closestIndex].style.opacity = '1'
-						document.querySelector('.spotlight-bg-img img').src =
-							spotlightItems[closestIndex].img
+						if (titleElements[currentActiveIndex]) titleElements[currentActiveIndex].style.opacity = '0.35';
+						if (titleElements[closestIndex]) titleElements[closestIndex].style.opacity = '1';
+						setBgImage(spotlightItems[closestIndex].img)
 						currentActiveIndex = closestIndex
 					}
 				} else if (progress > 0.95) {
@@ -297,7 +243,7 @@ const Spotlight = () => {
 				scrollTriggerRef.current.kill()
 			}
 		}
-	}, [spotlightItems.length])
+	}, [spotlightItems])
 
 	return (
 		<section className="spotlight" ref={spotlightRef}>
@@ -317,16 +263,39 @@ const Spotlight = () => {
 					</div>
 				</div>
 				<div className="spotlight-bg-img">
-					<img src="/spotlight/spotlight-img-1.jpg" alt="" />
+					<img src={bgImage} alt="" className="local-pixel-canvas" />
 				</div>
 			</div>
 			<div
 				className="spotlight-titles-container"
 				ref={titlesContainerElementRef}
 			>
-				<div className="spotlight-titles" ref={titlesContainerRef}></div>
+				<div className="spotlight-titles" ref={titlesContainerRef}>
+					{spotlightItems.map((item, index) => (
+						<a href={`/portfolio/${item.slug}`} key={item.slug} style={{ textDecoration: 'none', color: 'inherit' }}>
+							<h1 
+								ref={el => titleElementsRefs.current[index] = el}
+								style={{ opacity: index === 0 ? 1 : 0.35 }}
+							>
+								{item.name}
+							</h1>
+						</a>
+					))}
+				</div>
 			</div>
-			<div className="spotlight-images" ref={imagesContainerRef}></div>
+			<div className="spotlight-images" ref={imagesContainerRef}>
+				{spotlightItems.map((item, index) => (
+					<div 
+						className="spotlight-img" 
+						key={`img-${item.slug}`}
+						ref={el => imageElementsRef.current[index] = el}
+					>
+						<a href={`/portfolio/${item.slug}`}>
+							<img src={item.img} alt="" />
+						</a>
+					</div>
+				))}
+			</div>
 			<div className="spotlight-header" ref={spotlightHeaderRef}>
 				<AnimatedButton
 					label="All Projects"

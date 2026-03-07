@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation'
 import Nav from '@/ui/Nav/Nav'
 import AnimatedButton from '@/ui/AnimatedButton/AnimatedButton'
 import FeaturedProjects from '@/ui/FeaturedProjects/FeaturedProjects'
+import LocalPixelImage from '@/ui/PixelImageEffect/LocalPixelImage'
 import ClientReviews from '@/ui/ClientReviews/ClientReviews'
 import CTAWindow from '@/ui/CTAWindow/CTAWindow'
 import Copy from '@/ui/Copy/Copy'
@@ -359,10 +360,10 @@ export default function Home({
 					<div className="gallery-callout-col">
 						<div className="gallery-callout-row">
 							<div className="gallery-callout-img gallery-callout-img-1">
-								<img src="/gallery-callout/gallery-callout-1.jpg" alt="" />
+								<LocalPixelImage src="/gallery-callout/gallery-callout-1.jpg" alt="" />
 							</div>
 							<div className="gallery-callout-img gallery-callout-img-2">
-								<img src="/gallery-callout/gallery-callout-2.jpg" alt="" />
+								<LocalPixelImage src="/gallery-callout/gallery-callout-2.jpg" alt="" />
 								<div className="gallery-callout-img-content">
 									<h3>800+</h3>
 									<p>Project Images</p>
@@ -371,10 +372,10 @@ export default function Home({
 						</div>
 						<div className="gallery-callout-row">
 							<div className="gallery-callout-img gallery-callout-img-3">
-								<img src="/gallery-callout/gallery-callout-3.jpg" alt="" />
+								<LocalPixelImage src="/gallery-callout/gallery-callout-3.jpg" alt="" />
 							</div>
 							<div className="gallery-callout-img gallery-callout-img-4">
-								<img src="/gallery-callout/gallery-callout-4.jpg" alt="" />
+								<LocalPixelImage src="/gallery-callout/gallery-callout-4.jpg" alt="" />
 							</div>
 						</div>
 					</div>
