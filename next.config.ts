@@ -54,6 +54,10 @@ export default {
 		]
 	},
 
+	turbopack: {
+		root: __dirname,
+	},
+
 	env: {
 		SC_DISABLE_SPEEDY: 'false',
 	},
