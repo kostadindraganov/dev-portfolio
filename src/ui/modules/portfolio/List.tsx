@@ -1,29 +1,30 @@
 'use client'
 
 import { usePortfolioFilters } from '../blog/store'
-import PostPreview from '../blog/PostPreview'
+import PortfolioCard from './PortfolioCard'
 
 export default function PortfolioList({
 	items,
 	...props
 }: {
 	items: Sanity.PortfolioItem[]
-} & React.ComponentProps<'ul'>) {
+} & React.ComponentProps<'div'>) {
 	const filtered = useFilterPortfolioItems(items)
 
 	if (!filtered.length) {
-		return <div>No items found...</div>
+		return (
+			<div className="portfolio-record-count py-12 text-center">
+				[ 0_RECORDS_FOUND ]
+			</div>
+		)
 	}
 
 	return (
-		<ul {...props}>
-			{filtered?.map((item) => (
-				<li className="anim-fade" key={item._id}>
-					{/* Reuse blog preview temporarily; fields are compatible */}
-					<PostPreview post={item as any} />
-				</li>
+		<div {...props}>
+			{filtered.map((item) => (
+				<PortfolioCard item={item} key={item._id} />
 			))}
-		</ul>
+		</div>
 	)
 }
 

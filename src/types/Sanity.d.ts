@@ -236,8 +236,38 @@ declare global {
 			assets?: Img[]
 			assetFaded?: boolean
 		}
-		interface HomePortfolio extends Module<'home.portfolio'> {
+		interface FeaturedProject {
+			_key: string
+			info?: string
 			title?: string
+			description?: string
+			image?: Image & { alt?: string }
+		}
+
+		interface GalleryImage extends Image {
+			alt?: string
+		}
+
+		interface HomePortfolio extends Module<'home.portfolio'> {
+			// Preloader
+			preloaderFirstName?: string
+			preloaderLastName?: string
+			// What We Do
+			whatWeDoHeading?: string
+			howWeWorkTitle?: string
+			howWeWorkDescription?: string
+			tags?: string[]
+			// Featured Work
+			featuredWorkLabel?: string
+			featuredWorkTitle?: string
+			featuredProjects?: FeaturedProject[]
+			// Gallery Callout
+			galleryStatNumber?: string
+			galleryStatLabel?: string
+			galleryCopyText?: string
+			galleryCtaLabel?: string
+			galleryCtaRoute?: string
+			galleryImages?: GalleryImage[]
 		}
 		interface BlogList extends Module<'blog-list'> {
 			pretitle?: string

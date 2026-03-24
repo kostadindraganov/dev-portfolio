@@ -1,14 +1,27 @@
 "use client";
 import "./FeaturedProjects.css";
-import featuredProjectsContent from "./featured-projects-content";
+import defaultContent from "./featured-projects-content";
 import LocalPixelImage from "@/ui/PixelImageEffect/LocalPixelImage";
+import { urlFor } from "@/sanity/lib/image";
 
 import { useEffect } from "react";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const FeaturedProjects = () => {
+const FeaturedProjects = ({ projects }) => {
+  const items =
+    projects && projects.length > 0
+      ? projects.map((p, i) => ({
+          info: p.info,
+          title: p.title,
+          description: p.description,
+          image: p.image?.asset
+            ? urlFor(p.image).width(1200).url()
+            : defaultContent[i]?.image ?? `/featured-projects/featured-work-${i + 1}.jpg`,
+        }))
+      : defaultContent.map((p) => ({ ...p }));
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -64,7 +77,7 @@ const FeaturedProjects = () => {
   return (
     <>
       <div className="featured-projects">
-        {featuredProjectsContent.map((project, index) => (
+        {items.map((project, index) => (
           <div key={index} className="featured-project-card">
             <div className="featured-project-card-inner">
               <div className="featured-project-card-content">

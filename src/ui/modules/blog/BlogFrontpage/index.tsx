@@ -12,6 +12,7 @@ import PostPreview from '../PostPreview'
 import BlogPaginated from './Paginated'
 import PortfolioFilterList from '../../portfolio/FilterList'
 import PortfolioPaginated from '../../portfolio/Paginated'
+import PortfolioTerminalHeader from '../../portfolio/PortfolioTerminalHeader'
 
 export default async function BlogFrontpage({
 	mainPost,
@@ -105,35 +106,42 @@ export async function PortfolioFrontpage({
         `,
 	})
 
-	const [first, ...rest] =
+	const allItems: Sanity.PortfolioItem[] =
 		stegaClean(mainItem) === 'featured'
 			? sortFeaturedPosts(items as any)
 			: (items as any)
 
 	return (
-		<section className="section space-y-12">
-			<PostPreviewLarge post={first as any} />
+		<section className="portfolio-terminal">
+			<div className="mx-auto max-w-screen-xl space-y-8 p-8 max-md:px-4">
+				<PortfolioFilterList />
 
-			<hr />
+				<PortfolioTerminalHeader totalCount={allItems.length} />
 
-			<PortfolioFilterList />
-
-			<Suspense
-				fallback={
-					<ul className="grid gap-x-8 gap-y-12 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
-						{Array.from({ length: itemsPerPage ?? 6 }).map((_, i) => (
-							<li key={i}>
-								<PostPreview skeleton />
-							</li>
-						))}
-					</ul>
-				}
-			>
-				<PortfolioPaginated
-					items={sortFeaturedPosts(rest as any, showFeaturedFirst) as any}
-					itemsPerPage={itemsPerPage}
-				/>
-			</Suspense>
+				<Suspense
+					fallback={
+						<div className="portfolio-grid">
+							{Array.from({ length: itemsPerPage ?? 6 }).map((_, i) => (
+								<div
+									key={i}
+									className="portfolio-card animate-pulse"
+									style={{ minHeight: 280 }}
+								/>
+							))}
+						</div>
+					}
+				>
+					<PortfolioPaginated
+						items={
+							sortFeaturedPosts(
+								allItems as any,
+								showFeaturedFirst,
+							) as any
+						}
+						itemsPerPage={itemsPerPage}
+					/>
+				</Suspense>
+			</div>
 		</section>
 	)
 }

@@ -1,9 +1,7 @@
 import { fetchSanityLive } from '@/sanity/lib/fetch'
 import { groq } from 'next-sanity'
 import { Suspense } from 'react'
-import Filter from '../blog/BlogList/Filter'
-import css from '../blog/BlogList/FilterList.module.css'
-import { cn } from '@/lib/utils'
+import PortfolioFilter from './PortfolioFilter'
 
 export default async function PortfolioFilterList() {
 	const categories = await fetchSanityLive<Sanity.PortfolioCategory[]>({
@@ -19,17 +17,16 @@ export default async function PortfolioFilterList() {
 		<fieldset>
 			<legend className="sr-only">Filter by category</legend>
 
-			<div
-				className={cn(
-					css.list,
-					'filtering group flex flex-wrap gap-1 max-sm:justify-center',
-				)}
-			>
+			<div className="portfolio-filters">
+				<div className="portfolio-prompt mr-4">
+					ROOT@PORTFOLIO:~#
+				</div>
+
 				<Suspense>
-					<Filter label="All" />
+					<PortfolioFilter label="All" />
 
 					{categories?.map((category, key) => (
-						<Filter
+						<PortfolioFilter
 							label={category.title}
 							value={category.slug?.current}
 							key={key}

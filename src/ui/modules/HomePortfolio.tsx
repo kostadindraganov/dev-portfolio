@@ -16,6 +16,7 @@ import LocalPixelImage from '@/ui/PixelImageEffect/LocalPixelImage'
 import Copy from '@/ui/Copy/Copy'
 import Spotlight from '@/ui/Spotlight/Spotlight'
 import ScannHero from '@/ui/ScannHero'
+import { urlFor } from '@/sanity/lib/image'
 
 let isInitialLoad = true
 gsap.registerPlugin(ScrollTrigger, CustomEase)
@@ -23,7 +24,22 @@ CustomEase.create('hop', '0.9, 0, 0.1, 1')
 
 export default function Home({
 	headerMenu,
-}: {
+	preloaderFirstName = 'Kostadin',
+	preloaderLastName = 'Draganov',
+	whatWeDoHeading = 'At Terrene, we design with purpose and clarity,',
+	howWeWorkTitle = 'How we work',
+	howWeWorkDescription = 'We approach each build with a clarity of intent. Every plan is shaped through research, iteration, and conversation. What remains is the essential, designed to last and built to feel lived in.',
+	tags = ['Quiet', 'View', 'Tactile', 'Light-forward', 'Slow design', 'Modular rhythm'],
+	featuredWorkLabel = 'Featured work',
+	featuredWorkTitle = 'A selection of recent studies and completed spaces',
+	featuredProjects,
+	galleryStatNumber = '800+',
+	galleryStatLabel = 'Project Images',
+	galleryCopyText = 'Take a closer look at the projects that define our practice. From intimate interiors to expansive landscapes, each image highlights a unique perspective that might spark your next big idea.',
+	galleryCtaLabel = 'Explore Gallery',
+	galleryCtaRoute = 'blueprints',
+	galleryImages,
+}: Sanity.HomePortfolio & {
 	headerMenu: Sanity.Navigation
 }) {
 	const tagsRef = useRef<HTMLDivElement>(null)
@@ -39,7 +55,6 @@ export default function Home({
 	}, [])
 
 	useEffect(() => {
-		// Only show preloader on home page and only on initial load
 		if (pathname === '/') {
 			setShowPreloader(isInitialLoad)
 		} else {
@@ -159,14 +174,14 @@ export default function Home({
 		() => {
 			if (!tagsRef.current) return
 
-			const tags = tagsRef.current.querySelectorAll('.what-we-do-tag')
-			gsap.set(tags, { opacity: 0, x: -40 })
+			const tagEls = tagsRef.current.querySelectorAll('.what-we-do-tag')
+			gsap.set(tagEls, { opacity: 0, x: -40 })
 
 			ScrollTrigger.create({
 				trigger: tagsRef.current,
 				start: 'top 90%',
 				once: true,
-				animation: gsap.to(tags, {
+				animation: gsap.to(tagEls, {
 					opacity: 1,
 					x: 0,
 					duration: 0.8,
@@ -177,6 +192,18 @@ export default function Home({
 		},
 		{ scope: tagsRef },
 	)
+
+	const getGalleryImageSrc = (index: number): string => {
+		const sanityImg = galleryImages?.[index]
+		if (sanityImg?.asset) {
+			return urlFor(sanityImg as Sanity.Image).width(800).url()
+		}
+		return `/gallery-callout/gallery-callout-${index + 1}.jpg`
+	}
+
+	const getGalleryImageAlt = (index: number): string => {
+		return galleryImages?.[index]?.alt ?? ''
+	}
 
 	return (
 		<>
@@ -189,11 +216,11 @@ export default function Home({
 					<div className="intro-logo">
 						<div className="word" id="word-1">
 							<h1>
-								<span>Kostadin</span>
+								<span>{preloaderFirstName}</span>
 							</h1>
 						</div>
 						<div className="word" id="word-2">
-							<h1>Draganov</h1>
+							<h1>{preloaderLastName}</h1>
 						</div>
 					</div>
 					<div className="divider"></div>
@@ -247,32 +274,14 @@ export default function Home({
 			<Nav headerMenu={headerMenu} />
 			<section className="hero">
 				<div className="hero-bg">
-					{/* <img src="/home/hero.jpg" alt="" /> */}
 					<ScannHero />
 					<div className="hero-gradient"></div>
 				</div>
 
 				<div className="container">
 					<div className="hero-content">
-						<div className="hero-header">
-							{/* <Copy animateOnScroll={false} delay={showPreloader ? 10 : 0.85}>
-								<h1>Spaces that feel rooted, human, and quietly bold</h1>
-							</Copy> */}
-						</div>
-						<div className="hero-tagline">
-							{/* <Copy animateOnScroll={false} delay={showPreloader ? 10.15 : 1}>
-								<p>
-									At Terrene, we shape environments that elevate daily life,
-									invite pause, and speak through texture and light.
-								</p>
-							</Copy> */}
-						</div>
-						{/* <AnimatedButton
-							label="Discover More"
-							route="/studio"
-							animateOnScroll={false}
-							delay={showPreloader ? 10.3 : 1.15}
-						/> */}
+						<div className="hero-header"></div>
+						<div className="hero-tagline"></div>
 					</div>
 				</div>
 			</section>
@@ -282,45 +291,27 @@ export default function Home({
 						<Copy delay={0.1}>
 							<h1>
 								<span className="spacer">&nbsp;</span>
-								At Terrene, we design with purpose and clarity,
+								{whatWeDoHeading}
 							</h1>
 						</Copy>
 					</div>
 					<div className="what-we-do-content">
 						<div className="what-we-do-col">
 							<Copy delay={0.1}>
-								<p>How we work</p>
+								<p>{howWeWorkTitle}</p>
 							</Copy>
 
 							<Copy delay={0.15}>
-								<p className="lg">
-									We approach each build with a clarity of intent. Every plan is
-									shaped through research, iteration, and conversation. What
-									remains is the essential, designed to last and built to feel
-									lived in.
-								</p>
+								<p className="lg">{howWeWorkDescription}</p>
 							</Copy>
 						</div>
 						<div className="what-we-do-col">
 							<div className="what-we-do-tags" ref={tagsRef}>
-								<div className="what-we-do-tag">
-									<h3>Quiet</h3>
-								</div>
-								<div className="what-we-do-tag">
-									<h3>View</h3>
-								</div>
-								<div className="what-we-do-tag">
-									<h3>Tactile</h3>
-								</div>
-								<div className="what-we-do-tag">
-									<h3>Light-forward</h3>
-								</div>
-								<div className="what-we-do-tag">
-									<h3>Slow design</h3>
-								</div>
-								<div className="what-we-do-tag">
-									<h3>Modular rhythm</h3>
-								</div>
+								{tags.map((tag, i) => (
+									<div key={i} className="what-we-do-tag">
+										<h3>{tag}</h3>
+									</div>
+								))}
 							</div>
 						</div>
 					</div>
@@ -330,74 +321,51 @@ export default function Home({
 				<div className="container">
 					<div className="featured-projects-header-callout">
 						<Copy delay={0.1}>
-							<p>Featured work</p>
+							<p>{featuredWorkLabel}</p>
 						</Copy>
 					</div>
 					<div className="featured-projects-header">
 						<Copy delay={0.15}>
-							<h2>A selection of recent studies and completed spaces</h2>
+							<h2>{featuredWorkTitle}</h2>
 						</Copy>
 					</div>
 				</div>
-				<FeaturedProjects />
+				<FeaturedProjects projects={featuredProjects} />
 			</section>
-			{/* <section className="client-reviews-container">
-				<div className="container items-center">
-					<div className="flex h-screen items-center">
-						<TextScroll
-							default_velocity={3}
-							text="This Is KOKO dev this is ok - "
-							className="font-mono text-3xl font-semibold"
-						></TextScroll>
-					</div>
-				</div>
-			</section> */}
 			<section className="gallery-callout">
 				<div className="container">
 					<div className="gallery-callout-col">
 						<div className="gallery-callout-row">
 							<div className="gallery-callout-img gallery-callout-img-1">
-								<LocalPixelImage src="/gallery-callout/gallery-callout-1.jpg" alt="" />
+								<LocalPixelImage src={getGalleryImageSrc(0)} alt={getGalleryImageAlt(0)} />
 							</div>
 							<div className="gallery-callout-img gallery-callout-img-2">
-								<LocalPixelImage src="/gallery-callout/gallery-callout-2.jpg" alt="" />
+								<LocalPixelImage src={getGalleryImageSrc(1)} alt={getGalleryImageAlt(1)} />
 								<div className="gallery-callout-img-content">
-									<h3>800+</h3>
-									<p>Project Images</p>
+									<h3>{galleryStatNumber}</h3>
+									<p>{galleryStatLabel}</p>
 								</div>
 							</div>
 						</div>
 						<div className="gallery-callout-row">
 							<div className="gallery-callout-img gallery-callout-img-3">
-								<LocalPixelImage src="/gallery-callout/gallery-callout-3.jpg" alt="" />
+								<LocalPixelImage src={getGalleryImageSrc(2)} alt={getGalleryImageAlt(2)} />
 							</div>
 							<div className="gallery-callout-img gallery-callout-img-4">
-								<LocalPixelImage src="/gallery-callout/gallery-callout-4.jpg" alt="" />
+								<LocalPixelImage src={getGalleryImageSrc(3)} alt={getGalleryImageAlt(3)} />
 							</div>
 						</div>
 					</div>
 					<div className="gallery-callout-col">
 						<div className="gallery-callout-copy">
 							<Copy delay={0.1}>
-								<h3>
-									Take a closer look at the projects that define our practice.
-									From intimate interiors to expansive landscapes, each image
-									highlights a unique perspective that might spark your next big
-									idea.
-								</h3>
+								<h3>{galleryCopyText}</h3>
 							</Copy>
-							<AnimatedButton label="Explore Gallery" route="blueprints" />
+							<AnimatedButton label={galleryCtaLabel} route={galleryCtaRoute} />
 						</div>
 					</div>
 				</div>
 			</section>
-
-			{/* <CTAWindow
-				img="/home/home-cta-window.jpg"
-				header="Terrene"
-				callout="Spaces that breathe with time"
-				description="Our approach is guided by rhythm, proportion, and light, allowing every environment to grow more meaningful as it is lived in."
-			/> */}
 			<Spotlight />
 		</>
 	)

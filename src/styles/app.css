@@ -4,6 +4,7 @@
 @import './home.css';
 @import './scroll-hero.css';
 @import './footer.css';
+@import './portfolio.css';
 
 @theme {
 	--color-canvas: #fff;
