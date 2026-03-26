@@ -8,7 +8,7 @@ A developer portfolio built on SanityPress, using Next.js App Router + Sanity CM
 
 - Frontend pages are composed from Sanity documents and module arrays
 - Sanity Studio is embedded at `/admin`
-- Core content types include `page`, `blog.post`, `portfolio.item`, `global-module`, and `site`
+- Core content types: `page`, `blog.post`, `portfolio.item`, `global-module`, `site`
 
 ## Commands
 
@@ -26,7 +26,7 @@ A developer portfolio built on SanityPress, using Next.js App Router + Sanity CM
 
 Additional notes:
 - Node version is `v22.14.0` (`.nvmrc`)
-- No repo-level tests are configured (no `npm test` script or test runner config outside `node_modules`), so there is no native “run one test” command yet
+- No repo-level tests are configured; there is no native "run one test" command
 
 ## Architecture
 
@@ -42,6 +42,11 @@ Language-aware redirects are handled in `src/proxy.ts` (not `src/middleware.ts`)
 
 - Uses Sanity translations from `getTranslations()`
 - Matcher excludes `/api`, `/admin`, `/_next`, and `/favicon.ico`
+- Supported languages are configured in `src/lib/i18n.ts` — add/enable entries in `supportedLanguages` there
+
+### URL constants
+
+`src/lib/env.ts` exports `BLOG_DIR = 'blog'` and `PORTFOLIO_DIR = 'portfolio'`. These constants are used throughout GROQ queries and URL construction — do not hardcode the path strings.
 
 ### Data layer
 
@@ -62,13 +67,27 @@ Language-aware redirects are handled in `src/proxy.ts` (not `src/middleware.ts`)
 
 Pages render from Sanity module arrays via `src/ui/modules/index.tsx` (`MODULE_MAP`).
 
-When adding or changing a module, update all of these:
-1. Schema in `src/sanity/schemaTypes/modules/`
-2. Type in `src/types/Sanity.d.ts` (`// modules` section)
-3. GROQ expansion in `MODULES_QUERY` (`src/sanity/lib/queries.ts`) when needed
-4. Frontend mapping in `src/ui/modules/index.tsx`
+**When creating a new module, complete all five steps in order:**
 
-Missing one of the four usually causes missing data or non-rendering modules.
+1. Define the Sanity schema in `src/sanity/schemaTypes/modules/` and register it in `src/sanity/schemaTypes/index.ts`.
+2. Add the TypeScript interface to `src/types/Sanity.d.ts` under the `// modules` section, in alphabetical order.
+3. If the module fetches dereferenced or joined data, add a conditional expansion to `MODULES_QUERY` in `src/sanity/lib/queries.ts`:
+   ```ts
+   _type == 'your-module' => { field-> }
+   ```
+4. Create the frontend component under `src/ui/modules/`:
+   - If the module has interactive (`use client`) sub-components, create it as `ModuleName/index.tsx` and isolate reactive parts in sibling files.
+   - Otherwise, place it directly as `ModuleName.tsx`.
+5. Add the component to `MODULE_MAP` in `src/ui/modules/index.tsx`, in alphabetical order.
+
+Missing any step causes missing data or a silently non-rendering module.
+
+**MODULE_MAP key naming conventions:**
+- Kebab-case for most types: `accordion-list`, `card-list`, `richtext-module`
+- Dot-notation for variants: `hero.split`, `hero.saas`, `hero.split`, `testimonial.featured`, `home.portfolio`, `scroll.hero`
+
+**Passing extra props to modules:**
+Some modules need data beyond their Sanity document (e.g. `post`, `page`, `headerMenu`). Add a case for these in the `getAdditionalProps` switch in `src/ui/modules/index.tsx`.
 
 ### Global module composition
 
@@ -88,25 +107,26 @@ For detail templates:
 ### Sanity schema organization
 
 `src/sanity/schemaTypes/`:
-- `documents/` — top-level content docs (`site`, `page`, `blog.post`, etc.)
+- `documents/` — top-level content docs (`site`, `page`, `blog.post`, `portfolio.item`, `navigation`, `global-module`, `redirect`)
 - `modules/` — page-builder modules
-- `objects/` — reusable fields (`metadata`, `img`, `link`, `cta`, `module-options`)
-- `misc/` — supporting documents (`person`, `testimonial`, etc.)
+- `objects/` — reusable fields (`metadata`, `img`, `link`, `cta`, `module-options`, `icon`, `youtube`)
+- `misc/` — supporting documents (`person`, `testimonial`, `pricing`, `logo`, `reputation`, `announcement`)
+- `fragments/` — reusable GROQ query fragments and shared field definitions (e.g. `image-block`, `textAlign`, `admonition`)
 
 Schema registry entry point: `src/sanity/schemaTypes/index.ts`.
 
-## Conventions from repo rules
+## Conventions
 
 From `.cursor/rules/sanitypress.mdc` and established code style:
 
-- Prefer React Server Components, minimize `'use client'`
+- Prefer React Server Components; minimize `'use client'`
+- Use `<Img>` (`src/ui/Img.tsx`) for all images sourced from Sanity — do not use `<img>` or `next/image` directly for CMS assets
 - For Sanity schema, use `defineType`, `defineField`, `defineArrayMember`
-- Use camelCase schema field names
-- Prefer `react-icons/vsc` for schema icons when practical
-- Rich text should be Portable Text arrays (`of: [{ type: 'block' }]`)
-- Module schemas should separate `content` and `options` groups
-- Include `module-options` in module schemas
-- Use snippets from `.vscode/sanitypress.code-snippets` for schema/module scaffolding
+- Use camelCase for schema `name` values; omit `title` unless the name is an abbreviation or all-caps
+- Prefer `react-icons/vsc` for schema `icon` fields
+- Rich text fields: use `array` of `block` type, not the `text` primitive
+- Module schemas: separate fields into `content` and `options` groups; always include `module-options` as the first field in the `options` group
+- Use `.vscode/sanitypress.code-snippets` for schema and module boilerplate scaffolding
 
 ## Environment variables
 
